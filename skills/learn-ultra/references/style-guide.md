@@ -25,7 +25,7 @@
 
 ```
 header h1   34 px / 1.25  — 标题
-section h2  24 px / 1.4   — 12 章节标题
+section h2  24 px / 1.4   — 章节标题（章数由知识依赖图决定）
 section h3  18 px / 1.5   — 章节内子标题
 正文        16 px / 1.75
 table       14.5 px / 1.65

@@ -37,6 +37,7 @@
     font-size:16px;
     -webkit-font-smoothing:antialiased;
   }
+  .reading-progress{position:fixed;z-index:20;left:0;top:0;height:3px;width:0;background:var(--accent);transition:width .08s linear}
   /* ============ layout ============ */
   .layout{display:grid;grid-template-columns:var(--side) 1fr;min-height:100vh}
   aside.toc{
@@ -189,6 +190,9 @@
     border-top:1px dashed rgba(58,143,93,.25);
     margin-top:-2px;padding-top:12px;
   }
+  details.hint{margin:10px 0;border:1px dashed rgba(196,97,42,.38);border-radius:10px;background:rgba(196,97,42,.04)}
+  details.hint summary{cursor:pointer;padding:11px 15px;color:var(--warn);font-weight:500}
+  details.hint .hint-body{padding:0 15px 13px;color:var(--ink-2);font-size:14.5px}
 
   /* ============ pitfall list (常见误区) ============ */
   .pitfall{
@@ -199,6 +203,38 @@
   .pitfall .label{font-size:11px;letter-spacing:.12em;color:var(--err);font-weight:500;text-transform:uppercase}
   .pitfall .truth{margin-top:6px;color:var(--ink-2);font-size:14.5px}
   .pitfall .truth strong{color:var(--good)}
+
+  /* ============ textbook learning components ============ */
+  .chapter-contract{
+    margin:16px 0 22px;padding:16px 18px;
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:rgba(243,239,229,.55);
+  }
+  .chapter-contract .contract-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+  .chapter-contract h3{margin:0 0 8px;font-size:13px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase}
+  .chapter-contract p,.chapter-contract ul{margin:0;font-size:14.5px}
+  .objective-list{counter-reset:objective;list-style:none;padding:0!important}
+  .objective-list li{counter-increment:objective;padding-left:34px;position:relative}
+  .objective-list li::before{content:'O' counter(objective);position:absolute;left:0;top:1px;font:11px var(--mono);color:var(--accent);background:#fff;padding:2px 6px;border-radius:5px}
+  .worked-example{margin:22px 0;border:1px solid rgba(124,92,255,.22);border-radius:var(--radius);overflow:hidden;background:#fff}
+  .worked-example header{display:flex;gap:12px;align-items:baseline;padding:12px 16px;background:rgba(124,92,255,.06);border-bottom:1px solid rgba(124,92,255,.15)}
+  .worked-example header span{font:12px var(--mono);color:var(--accent-2)}
+  .worked-example header strong{font-size:16px}
+  .worked-example>p,.worked-example>ol,.worked-example>div{margin:12px 16px}
+  .worked-example .solution{padding-left:24px}
+  .worked-example .interpret{color:var(--ink-2)}
+  .worked-example .check{padding-top:10px;border-top:1px dashed var(--line);font-size:14px;color:var(--good)}
+  .exercise-set{margin:24px 0;padding-top:8px;border-top:1px solid var(--line)}
+  .exercise-meta{display:inline-flex;gap:8px;align-items:center;margin-left:8px;font:11px var(--mono);color:var(--ink-3)}
+  .difficulty{padding:2px 7px;border-radius:999px;background:var(--paper-2)}
+  .source-note{margin:14px 0;padding:10px 14px;border-left:3px solid var(--ink-3);background:rgba(108,115,149,.05);font-size:13.5px;color:var(--ink-2)}
+  .source-note strong{color:var(--ink)}
+  .chapter-summary{margin:22px 0 0;padding:14px 16px;border-radius:10px;background:rgba(58,143,93,.06);border:1px solid rgba(58,143,93,.18)}
+  .chapter-summary strong{color:var(--good)}
+  .reading-paths{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+  .reading-paths>div{padding:14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+  .reading-paths strong{display:block;margin-bottom:4px;color:var(--accent)}
+  @media (max-width:900px){.chapter-contract .contract-grid,.reading-paths{grid-template-columns:1fr}}
 
   /* ============ meta footer ============ */
   footer.meta{
@@ -218,6 +254,7 @@
 </style>
 </head>
 <body>
+<div class="reading-progress" aria-hidden="true"></div>
 <div class="layout">
   <aside class="toc">
     <h2>目录</h2>
@@ -270,9 +307,23 @@
     let activeIdx = 0;
     sections.forEach((s, i) => { if (s.offsetTop <= y) activeIdx = i; });
     links.forEach((a, i) => a.classList.toggle('active', i === activeIdx));
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? Math.min(100, Math.max(0, window.scrollY / max * 100)) : 0;
+    const progress = document.querySelector('.reading-progress');
+    if (progress) progress.style.width = pct + '%';
   };
   window.addEventListener('scroll', onScroll, { passive:true });
   onScroll();
+
+  // 4. print complete solutions while preserving interactive state
+  let detailsState = [];
+  window.addEventListener('beforeprint', () => {
+    detailsState = Array.from(document.querySelectorAll('details')).map(node => [node, node.open]);
+    detailsState.forEach(([node]) => { node.open = true; });
+  });
+  window.addEventListener('afterprint', () => {
+    detailsState.forEach(([node, open]) => { node.open = open; });
+  });
 </script>
 </body>
 </html>

@@ -1,283 +1,66 @@
 ---
 name: learn-ultra
-description: Use when user wants to deeply study a GitHub repository (local path or URL), research paper (arXiv URL, PDF, or markdown), or technical article/blog post (web URL) and wants an interactive Chinese-language single-file HTML study report. Triggers on phrases like "learn-ultra", "learnUltra", "learn-art" (legacy alias), "深入解析", "深入分析", "深入解读", "学习报告", "研究报告", "交互式学习", "解读论文", "解读这个仓库", "学习这个项目", "github 仓库学习", "paper 学习", "学习提升", "解读文章", "解读博客", "文章解读", "博客解读", "深度解读这篇文章", "分析这篇文章", "解读技术博客", "博客学习", "文章学习", or when the user shares a GitHub URL, arXiv URL, PDF, or web article/blog URL and asks for in-depth study material. Output is a self-contained HTML file (TOC sidebar + Mermaid diagrams + side-by-side code/explanation).
+description: Turn a GitHub repository, paper, technical article, or a collection of internal/external source documents into a source-grounded Chinese learning artifact. Use when the user asks for in-depth study, a learning path, tutorial, textbook-style HTML, interactive study report, worked examples, exercises, or curriculum restructuring. Produces a reader-first single-file HTML with a prerequisite graph, progressive chapters, derivations, worked examples, graded exercises, answers, source traceability, and automated quality checks.
 ---
 
-# learn-ultra：把 GitHub 仓库、Paper 或技术文章变成一篇逐模块、逐观点的深度解析报告
-
-## 这是什么
-
-`learn-ultra` 把用户给定的 **GitHub 仓库**、**研究论文** 或 **技术文章/博客**，转换成一篇**单文件、离线可读的中文交互式 HTML 解析报告**。报告按模块、架构、观点逐条拆解，面向"深度研究"而非"快速浏览"。
-
-输出物的特征：
-
-- **单文件 HTML**（CSS/JS 内嵌，仅 Mermaid + highlight.js + Noto Sans SC 走 CDN）
-- **左侧 TOC 侧边栏 + 右侧主体**，滚动联动高亮
-- **Mermaid 架构图/流程图**，把模块依赖和端到端调用链画清楚
-- **代码 + 大白话翻译双栏**：左边是关键代码/公式，右边一段中文解释
-- **9 个固定章节**（见下方"内容规范"），保证报告结构稳定、便于对比阅读
-- **逐条解析风格**：章节 03/04/05 按模块、组件、观点逐一展开，不笼统概括
-
-## 何时使用
-
-只要用户表达出「我想吃透这个 X」的意图，就用这个 skill。X 可以是：
-
-- 本地仓库路径（`/Users/.../some-repo`）
-- GitHub URL（`https://github.com/owner/repo`）
-- arXiv 链接（`https://arxiv.org/abs/2501.xxxxx`）
-- 论文 PDF 本地路径或 URL
-- 已经准备好的 Markdown 论文稿
-- 技术文章/博客的网页 URL（如 `https://medium.com/...`、`https://www.myzaker.com/article/...` 等）
-
-不要用于：
-
-- 用户只想要简短摘要 / 一段话总结（用普通问答即可）
-- 用户要的是 API 速查 / 代码补全（不是学习场景）
-- 用户已经在写自己的报告，只让你修一段文字（不是从零生成）
-
-## 第一次触发：欢迎语
-
-如果用户触发了 skill 但**还没说要分析什么**，先用这段中文打招呼：
-
-> 我是 **learn-ultra**，可以把任意 GitHub 仓库、论文或技术文章，整理成一篇逐模块、逐观点深度拆解的中文解析报告（单文件 HTML，离线可看）。
->
-> 把目标丢给我就行，比如：
-> - **本地仓库**：`./my-project` 或绝对路径
-> - **GitHub 链接**：`https://github.com/owner/repo`
-> - **论文**：arXiv 链接 / PDF 路径 / Markdown 文稿
-> - **技术文章/博客**：网页 URL（如 Medium、知乎、公众号文章链接等）
->
-> 我会自动判断输入类型，按 9 个章节逐条拆解架构、模块和核心观点，输出一份带架构图、关键代码大白话翻译的深度解析页面。
->
-> 想现在就开始吗？告诉我目标在哪儿。
-
-如果用户**已经提供了目标**，跳过欢迎语，直接进入"输入识别"。
-
-## 输入识别（Input Detection）
-
-按以下顺序判断：
-
-1. 字符串以 `https://github.com/` 开头 → **仓库分支**，先 `git clone --depth 1 <url> /tmp/learn-ultra-<repo>` 再分析
-2. 本地路径存在且包含 `.git/` 或 `package.json`/`pyproject.toml`/`go.mod`/`Cargo.toml` 之一 → **仓库分支**
-3. 字符串以 `https://arxiv.org/` 开头 → **论文分支**，下载 PDF 或 abs 页面
-4. 路径以 `.pdf` 结尾 → **论文分支**，用 Read 工具读 PDF（最多 20 页一次，超长分段读）
-5. 路径以 `.md`/`.txt` 结尾且内容像论文（含 Abstract / References） → **论文分支**
-6. 字符串以 `https://` 或 `http://` 开头且不属于以上类型 → **文章/博客分支**，用 WebFetch 抓取网页内容
-7. 都不像 → 反问用户："你想分析的是仓库、论文还是技术文章？给我一个具体的路径或链接。"
-
-## 流程总览
-
-```
-输入 ──► 类型识别 ──► (仓库分支 or 论文分支 or 文章/博客分支) ──► 9 章节内容生成 ──► HTML 组装 ──► 输出文件
-```
-
-不论哪个分支，最终都填入**同一套 9 章节模板**，差异在每章的"原始素材来源"和"分析手法"。
-
-## 仓库分析流程（Repo Branch）
-
-详细操作步骤见 `references/analysis-recipes.md`，核心五步：
-
-1. **结构鸟瞰**：`ls -la` + 关键配置文件（package.json/go.mod/...）→ 列出顶层目录的职责
-2. **入口识别**：找 `main`/`index`/`cli`/`server` 等入口；找 README 中的"快速开始"代码块
-3. **核心抽象提取**：在源码里 grep 关键词（`class `/`function `/`def `/`type `/`interface `/`export `）→ 用频次和位置识别 3-7 个核心抽象
-4. **端到端 trace**：选一个最有代表性的 happy-path（例如"用户调用 X 函数"），从入口一路读到底层，画成 Mermaid sequenceDiagram
-5. **模块间关系梳理**：按"先理解依赖再理解使用者"理清模块间的调用与数据流
-
-> 大型仓库（>500 文件）：不要试图读完，按"以 README 为索引、按需深入"的策略，把 90% 篇幅花在前 10% 重要文件上。
-
-## 论文分析流程（Paper Branch）
-
-详细操作步骤见 `references/analysis-recipes.md`，核心五步：
-
-1. **骨架解析**：抽出 Abstract / Introduction / Method / Experiments / Conclusion 各自的核心 1-2 句
-2. **问题定位**：用一段中文回答"作者想解决什么、为什么以前的办法不够"
-3. **方法核心**：把方法部分翻译成"输入 → 关键变换 → 输出"的三步式表达；如果有公式，挑 1-3 个最关键的，配大白话解释
-4. **实验关键**：列出 3-5 个最有说服力的数字结果，标注与谁比较、提升多少；指出哪些消融最能反映方法的"为什么有效"
-5. **局限与启示**：作者承认的局限 + 你读完后能想到的延伸方向（≥2 条）
-
-## 文章/博客分析流程（Article Branch）
-
-当输入是技术文章/博客的网页 URL 时，按以下五步操作：
-
-1. **内容抓取**：用 WebFetch 工具抓取网页全文内容。如果一次抓取不够完整（如分页文章），多次抓取拼接。同时抓取文章标题、作者、发布日期等元信息。
-2. **主题定位**：判断文章属于哪种类型——技术深度分析、行业观点评述、产品发布报道、学术成果科普等。根据类型选择合适的分析角度。
-3. **信息补全**：文章中提到的关键技术概念、项目、论文，用 WebSearch 或 Agent 补充背景资料，确保解析报告中的技术细节准确且有深度（这一步是文章分支区别于简单摘要的关键）。
-4. **结构化重组**：将文章的非线性叙述重新组织为 9 章节结构。文章可能没有明显的"方法"或"实验"部分，需要根据内容自主映射到最合适的章节框架。
-5. **观点提炼与延伸**：提取文章中 3-10 个核心观点或技术概念，逐条深度解析；补充文章未提及但相关的延伸阅读方向。
-
-> 文章分支的核心价值在于：不仅"解读"文章说了什么，更通过补充背景资料和结构化重组，让读者获得比原文更系统、更深入的理解。
-
-## 9 章节内容规范
-
-**每一篇 learn-ultra 报告必须包含、且只包含这 9 个一级章节**，章节标题保持一致以便用户跨主题对比阅读：
-
-| # | 章节标题 | 必备内容 | 仓库专属 | 论文专属 |
-|---|---------|---------|---------|---------|
-| 1 | 一句话理解 | ≤80 字概括"它是什么" | 项目定位 | 论文一句话 |
-| 2 | 项目/论文卡片 | 元信息表格 | 仓库 stars/license/语言/版本/官网 | 作者/机构/会议或期刊/年份/PDF 链接 |
-| 3 | 为什么存在 | **逐条**列出问题、动机、现有方案缺口（见下方详细规范） | 痛点逐条 + 现有工具缺口逐条 | Related work 逐篇简述 + gap 逐条 |
-| 4 | 架构/模块拆解 | **必须包含 ≥1 个 Mermaid 图** + **逐模块/逐层展开**（见下方详细规范） | 每个模块：职责 + 接口 + 依赖 + 设计决策 | 每个章节/阶段：输入 + 处理 + 输出 + 与前后阶段的关系 |
-| 5 | 核心观点/抽象逐条解析 | **逐条**拆解 3-10 个关键概念/观点/设计决策（见下方详细规范） | 类/函数/接口/设计模式 | 关键术语/记号/核心论点/创新点 |
-| 6 | 关键代码/公式 + 大白话 | 双栏：左侧代码或公式（含语言/编号），右侧 2-4 句中文解释；至少 3 组 | 关键代码片段 | 关键公式 / 算法伪码 |
-| 7 | 端到端流程 | **必须包含 1 个 Mermaid sequenceDiagram 或 flowchart** + 一段叙述 | 一个 happy-path 的完整调用链 | 一个完整样本从输入到输出的 pipeline |
-| 8 | 心智模型 | ≥2 个类比/比喻，帮助建立直觉 | 比如"插件系统就像乐高底板" | 比如"attention 像查字典" |
-| 9 | 延伸阅读 / 文件索引 | 仓库：关键文件清单（路径 + 一句话）；论文：参考文献中的 5-10 篇关键引用 | 文件 → 职责 表格 | 引用 → 与本文关系 表格 |
-
----
-
-### 章节 03 详细规范：为什么存在
-
-本章必须**逐条**展开，不允许用一段话笼统概括。结构如下：
-
-**仓库分支**：
-
-1. **核心痛点**（逐条列出 2-5 个）：每条格式为「痛点描述 → 影响范围 → 严重程度」
-2. **现有方案盘点**（逐条列出 2-4 个）：每条格式为「方案名 → 它怎么做的 → 它在哪里不够 → 具体例子或数据」
-3. **本项目的切入点**：用 1-2 段说明本项目选择了什么角度来突破，为什么这个角度有效
-4. **设计哲学/原则**（如有）：逐条列出项目遵循的设计原则（如 "convention over configuration"），每条配一句解释
-
-**论文分支**：
-
-1. **问题定义**：精确描述作者要解决的问题，包括形式化定义（如有）
-2. **为什么难**（逐条列出 2-4 个难点）：每条说明难在哪里、为什么直觉方法不行
-3. **前人工作逐条评述**（3-6 条）：每条格式为「方法/论文 → 核心思路 → 贡献 → 局限/与本文的差异」
-4. **本文的关键洞察**：用 1-2 句话提炼作者最核心的 insight，说明为什么这个角度能突破前人
-
----
-
-### 章节 04 详细规范：架构/模块拆解
-
-本章是报告的**结构核心**，必须做到"读完本章就能画出整个系统的框图"。
-
-**通用要求**：
-- 至少 1 个 Mermaid flowchart 展示全局架构（模块/阶段之间的关系）
-- 如果架构有分层，额外画一个分层图
-- 每个模块/阶段**逐条**展开，不允许合并描述
-
-**仓库分支**——逐模块展开，每个模块包含：
-
-| 字段 | 说明 |
-|------|------|
-| 模块名 | 对应目录或包名 |
-| 一句话职责 | 这个模块"只做什么" |
-| 对外接口 | 暴露的关键 API / 导出符号 |
-| 依赖关系 | 它调用谁、被谁调用 |
-| 内部结构 | 子文件/子模块的组织方式（如有） |
-| 设计决策 | 为什么这样划分？有什么权衡？ |
-
-如果模块数量 > 7，按重要度排序，前 5 个详细展开，其余用表格简述。
-
-**论文分支**——逐阶段/逐章节展开，每个阶段包含：
-
-| 字段 | 说明 |
-|------|------|
-| 阶段名 | 对应论文章节或 pipeline 阶段 |
-| 输入 | 这一阶段接收什么 |
-| 核心处理 | 做了什么变换/计算 |
-| 输出 | 产出什么，交给下一阶段什么 |
-| 与前后阶段的关系 | 数据如何流动、为什么这个顺序 |
-| 关键设计选择 | 作者为什么选这个方案而非替代方案 |
-
----
-
-### 章节 05 详细规范：核心观点/抽象逐条解析
-
-本章是报告的**思想核心**，必须逐条拆解，每条独立成段，不允许"以下列举了 N 个概念"然后一个表格带过。
-
-**通用格式**——每个抽象/观点/概念按以下结构展开：
-
-```
-### 5.N <概念名/观点名>
-
-**定义**：一句话精确定义
-
-**为什么需要它**：如果没有它会怎样？解决什么具体问题？
-
-**它是怎么工作的**：2-4 句描述机制/原理
-
-**与其他概念的关系**：它和前面/后面的概念如何协作、对比、互补
-
-**关键细节/边界条件**：容易忽略但重要的实现细节或适用条件
-
-**源码/论文定位**：对应文件路径:行号 或 论文章节/公式编号
-```
-
-**仓库分支**额外要求：
-- 3-7 个核心抽象（类/接口/函数/设计模式）
-- 每个抽象必须给出"入口文件"定位
-- 如果抽象之间有继承/组合/依赖关系，用一个 Mermaid classDiagram 或 flowchart 展示
-
-**论文分支**额外要求：
-- 3-10 个核心概念/术语/创新点
-- 每个概念必须给出"在论文哪里定义的"（章节号或公式编号）
-- 如果概念之间有层次/递进关系，用一个 Mermaid flowchart 展示
-- 对于核心创新点，额外说明"与前人方法的本质区别是什么"
-
----
-
-每一章下面按需使用：
-
-- **段落**：陈述要点，避免大段堆砌，控制在 2-4 段
-- **表格**：用于对比、清单类信息
-- **代码块**：保留语言标记（` ```ts ` / ` ```python ` / ` ```math `）
-- **Mermaid**：图表统一用 ` ```mermaid ` 围栏，渲染由模板里的 mermaid CDN 处理
-
-## HTML 组装
-
-模板和样式在 `references/template.html`，使用方式：
-
-1. 读取 `references/template.html`
-2. 用如下占位符替换为真实内容：
-   - `{{TITLE}}` → "<项目或论文名> · learn-ultra 解析报告"
-   - `{{SUBTITLE}}` → 一句话理解（章节 1 的内容）
-   - `{{TOC_ITEMS}}` → 9 个章节的 `<li><a href="#sec-N">标题</a></li>`
-   - `{{SECTIONS_HTML}}` → 9 个 `<section id="sec-N">…</section>` 拼接
-   - `{{META_FOOTER}}` → 生成时间、源链接、本工具署名
-3. Mermaid 图直接嵌：
-   ```html
-   <div class="mermaid">
-   flowchart LR
-     A --> B
-   </div>
-   ```
-4. 代码 + 大白话双栏：
-   ```html
-   <div class="code-pair">
-     <pre><code class="language-ts">…</code></pre>
-     <div class="explain">…中文解释…</div>
-   </div>
-   ```
-
-样式细节、配色、字号见 `references/style-guide.md`。**不要修改模板的 CSS/JS** —— 模板是经过测试的，自定义会破坏 TOC 滚动联动等功能。
-
-## 输出位置
-
-- 默认写到 `~/Documents/ai.alibaba/learn-ultra/<slug>.html`
-  - `<slug>` = 仓库名或论文短标题，去掉特殊字符
-- 如果用户明确指定 `--out <path>`，按用户指定
-- 同时打印一行 `DONE: <绝对路径>` 方便上层捕获
-
-## 质量检查（写完后必过）
-
-在交付前自检以下条目，**任何一条不达标都要修补再交付**：
-
-- [ ] 9 个章节齐全，标题与规范一致
-- [ ] 章节 3 逐条展开（≥2 条痛点/难点 + ≥2 条现有方案评述），不是一段话概括
-- [ ] 章节 4 至少 1 个 Mermaid 图，且每个模块/阶段逐条展开（≥3 个模块/阶段）
-- [ ] 章节 5 至少 3 个概念/观点逐条解析，每条包含定义、为什么需要、机制、关系、定位
-- [ ] 章节 6 至少 3 组「代码/公式 + 大白话」对照
-- [ ] 章节 7 至少 1 个 Mermaid sequenceDiagram 或 flowchart
-- [ ] 全文是中文（除代码、命令、专有名词外）
-- [ ] HTML 在浏览器打开后 TOC 可点、Mermaid 渲染、代码高亮生效
-- [ ] 文件能离线打开（断网下样式不丢、只 Mermaid 等 CDN 失效但不影响阅读）
-- [ ] 末尾打印 `DONE: <绝对路径>`
-
-## 红旗信号 — 看到立即停下检查
-
-- 章节 3 只有一段话概括"因为现有方案不好所以做了这个" → 必须逐条展开
-- 章节 4 只画了图没有逐模块文字说明 → 每个模块必须有独立段落
-- 章节 5 用一个大表格代替逐条解析 → 必须每个概念独立成段、有完整结构
-- 想交付时章节 4 或 7 没有 Mermaid 图 → 回去补
-- 章节 6 的"大白话"实际上还是代码注释级别 → 重写为"为什么这样设计"
-- 报告里有英文段落（除引用、专有名词外） → 翻译成中文
-- HTML 文件 > 5 MB → 检查是否嵌入了大图片 base64，应该改成外链或省略
+# learn-ultra
+
+Build a learning artifact, not a long summary. Optimize for what a first-time reader can understand, practice, and verify.
+
+## Required workflow
+
+1. **Establish the reader and task.** Read supplied material first. Infer the learning goal, prior knowledge, language, source cutoff, depth, retained material, and deliverable. Ask one or two focused questions only when a missing answer materially changes the lowest explanation level or artifact. Honor a request to proceed without questions and record assumptions.
+2. **Create a teaching brief.** Fill [project-brief.md](references/project-brief.md): observable outcomes, prerequisites, sources, planned emphasis, explanation/visual, practice, assessment, and status. Show the user only a concise plan; keep the detailed table as working material.
+3. **Prove the output route early.** Smoke-test the requested HTML/PDF/toolchain with the actual language, one equation, one visual, and one local asset where applicable. If a route fails after one evidence-based repair, switch to a capable fallback without reducing teaching depth.
+4. **Acquire sources before outlining.** Use the most authoritative readable source. For authenticated Lark/Feishu URLs, prefer lark-cli docs +fetch with an authorized identity; otherwise use an authorized browser/CDP route without printing cookies. Record source version and exact sections read.
+5. **Build an evidence ledger.** Separate source facts, derived explanations, teaching examples, assumptions, and recommendations. Never promote an AI summary, search snippet, or inference into a source claim. Read [source-and-evidence.md](references/source-and-evidence.md).
+6. **Build a concept inventory and prerequisite graph.** Extract the target capability, concepts, formulas, systems, decisions, misconceptions, and practical tasks. Trace only prerequisites used by a downstream argument or task. Order concepts by dependency, not source order. Read [textbook-design.md](references/textbook-design.md).
+7. **Create the curriculum contract.** For every chapter specify prerequisites, measurable outcomes, core explanation, example/application, misconceptions, practice, solutions, and source anchors. Allocate emphasis by prerequisite gap and difficulty, not evenly.
+8. **Write progressively.** Use concrete problem → intuition → definition → derivation/mechanism → fully worked example → closely related or partly completed problem → independent variation → synthesis. Introduce notation before use and keep a running model when it reveals connections.
+9. **Design valid assessment.** Solve each exercise before accepting its wording. State inputs, assumptions, units, constraints, and evaluation criteria. Keep optional hints separate from complete solutions. Solutions must identify decisive reasoning and plausible failure modes, not only final values.
+10. **Assemble the artifact.** Use [template.html](references/template.html) and the semantic components in [textbook-design.md](references/textbook-design.md). Preserve static readability without JavaScript; interactive controls need an informative default and print state.
+11. **Run two complete rounds for substantial work.** Follow [tutorial-loop.md](references/tutorial-loop.md) and record each round in [round-record.md](references/round-record.md). Each round revisits requirements and sources, reviews the complete scope, builds/opens the actual artifact, solves or tests exercises, records findings, fixes them, and rechecks. Use a third round only for deep dependencies, extensive mathematics, a new rendering route, or material round-two findings. Two lint/build invocations are not two rounds.
+12. **Validate and deliver.** Run scripts/validate_learning_html.py, then apply [quality-gates.md](references/quality-gates.md). Distinguish mathematical reasoning, numerical tests, controlled experiments, and visual inspection in the handoff. Verify the delivered copy opens without temporary files. Report source access limits and unresolved claims. Print DONE: followed by the absolute path on its own line.
+
+## Input routing
+
+- GitHub URL or local repository: inspect README/config, find entry points and core abstractions, trace a representative end-to-end path. For large repositories, use README as an index and prioritize the critical 10% of files.
+- Paper/PDF: extract problem, assumptions, method, formulas, experiments, limitations, and prerequisite concepts. Do not force software-specific sections.
+- Article/blog: retrieve the full article, verify key claims with authoritative sources when current information matters, then reorganize by conceptual dependency.
+- Multi-source corpus: create a source manifest, deduplicate overlapping claims, resolve conflicts by authority/recency, and map each chapter to its sources.
+- Existing learning HTML: audit the current learning path, source fidelity, examples, exercises, answers, and coverage before editing. Preserve unrelated user content.
+
+## Output architecture
+
+Do not force every topic into a fixed number of chapters. Use 6–14 chapters based on the prerequisite graph. The artifact must still contain these functional layers, distributed naturally:
+
+- orientation: promise, audience, prerequisites, roadmap;
+- foundations: definitions, notation, business/problem setting;
+- system/model: architecture, mechanisms, formulas, tradeoffs;
+- guided practice: worked examples with intermediate steps;
+- independent practice: recall, application, transfer, synthesis;
+- verification: answers, source map, limitations, coverage report.
+
+## Non-negotiable rules
+
+- Do not invent inaccessible source content. Mark partial access and evidence gaps.
+- Do not arrange chapters in source collection order when conceptual dependency suggests another order.
+- Use Mermaid only for real dependency, sequence, hierarchy, or architecture relationships.
+- Define formula symbols, units, assumptions, and include an interpretation or example.
+- Do not present an exercise without an answer or scoring rubric.
+- Do not group unrelated questions and call them a connected exercise. Reuse one model or case and change one meaningful condition at a time.
+- Do not claim a visual review from rendering alone; inspect the actual desktop, narrow-screen, and print/static result when applicable.
+- Do not claim a theorem from numerical tests or a benchmark result from a teaching example.
+- Escape source-provided text before inserting it into HTML. Do not preserve or execute source-provided script, event-handler, iframe, object, or untrusted raw HTML content.
+- Do not claim completion when validation fails or source coverage is materially incomplete.
+- Keep the main explanation in Chinese except code, commands, formulas, product names, and unavoidable technical terms.
+
+## Resource routing
+
+- Curriculum, chapter contract, example and exercise patterns: [textbook-design.md](references/textbook-design.md)
+- Teaching brief and requirement coverage: [project-brief.md](references/project-brief.md)
+- Full writing/build/review rounds: [tutorial-loop.md](references/tutorial-loop.md)
+- Source acquisition, evidence labels, multi-source conflict handling: [source-and-evidence.md](references/source-and-evidence.md)
+- Repository/paper/article inspection recipes: [analysis-recipes.md](references/analysis-recipes.md)
+- HTML structure and components: [template.html](references/template.html), [style-guide.md](references/style-guide.md)
+- Automated and manual acceptance criteria: [quality-gates.md](references/quality-gates.md)

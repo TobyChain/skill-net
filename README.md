@@ -7,7 +7,7 @@ Ultra 系列 Agent Skills，用于 Qoder / Claude Code / 兼容 SKILL.md 规范�
 | 技能 | 用途 | 输出 |
 | --- | --- | --- |
 | [`prompt-ultra`](skills/prompt-ultra) | 建立当前任务契约，并把明确要求长期保留的约定迁移到原生持久指令文件 | Work Contract / Persistent Work Instructions |
-| [`learn-ultra`](skills/learn-ultra) | 把 GitHub 仓库、论文或技术文章转成逐模块、逐观点的深度解析报告 | 单文件离线 HTML（TOC 侧栏 + Mermaid + 代码/大白话双栏） |
+| [`learn-ultra`](skills/learn-ultra) | 把仓库、论文、文章或多来源资料重构成可学习、可练习、可验证的中文教材 | 教材式单文件 HTML / 学习路径 / 例题与练习 |
 | [`figure-ultra`](skills/figure-ultra) | 通用可视化与图片交付，三引擎自动路由 | `.drawio` / `.excalidraw` / PNG / SVG / PDF |
 | [`tikz-ultra`](skills/tikz-ultra) | LaTeX 原生、源码可复现的 TikZ/PGF 绘图工作流 | `.tex` / PDF / PNG / SVG |
 | [`paper-ultra`](skills/paper-ultra) | 修改、翻译与审阅论文，同时保护证据和贡献边界 | 修订稿 / 审阅意见 / 双语同步文本 |
@@ -36,19 +36,19 @@ Ultra 系列 Agent Skills，用于 Qoder / Claude Code / 兼容 SKILL.md 规范�
 
 ## learn-ultra
 
-把任意 **GitHub 仓库**、**研究论文**（arXiv / PDF / Markdown）或 **技术文章/博客**（网页 URL），转换成一篇单文件、离线可读的中文交互式 HTML 解析报告。面向「深度研究」而非「快速浏览」。
+把 **GitHub 仓库**、**研究论文**、**技术文章**或一组内部/外部资料，重构成来源可追溯、依赖关系清晰、可练习和可验收的中文学习材料。目标不是复述来源，而是让第一次接触主题的读者形成可验证的能力。
 
-**固定 9 章节结构**，保证跨主题可对比阅读：一句话理解 → 项目/论文卡片 → 为什么存在 → 架构/模块拆解 → 核心观点逐条解析 → 关键代码/公式 + 大白话 → 端到端流程 → 心智模型 → 延伸阅读。
+章节数量由知识依赖图决定，通常为 6–14 章；每章从真实问题出发，依次提供直觉、定义、机制或推导、完整例题、反例、练习、答案和来源定位。
 
 特征：
 
-- 三种输入分支自动识别（仓库 / 论文 / 文章），各有对应的五步分析流程
-- 章节 03/04/05 强制逐条展开，不允许一段话笼统概括
-- 章节 04 与 07 必须含 Mermaid 图（架构图 + 端到端调用链）
-- 章节 06 至少 3 组「代码或公式 + 中文大白话」双栏对照
-- 文章分支会额外用 WebSearch 补全背景资料，让报告比原文更系统
+- 支持仓库、论文、文章、多来源语料和已有学习 HTML，并根据来源类型选择分析方法
+- 先建立 teaching brief、来源清单、证据 ledger、概念 inventory 和先修依赖图，再确定课程结构
+- 用完整例题、近迁移题、独立变式和综合题建立学习脚手架；每题提供答案或评分 rubric
+- substantial 教材默认进行两轮完整写作、构建与复审，不把两次 lint 当成两轮审阅
+- 提供 HTML 自动验收脚本，检查章节、锚点、目标覆盖、练习层级、答案、来源、移动端 viewport，以及按需启用的公式解释和关系图门禁
 
-触发词：`learn-ultra`、深入解析、深入解读、学习报告、研究报告、解读论文、解读这个仓库、解读文章，或直接给出 GitHub / arXiv / 文章 URL。
+触发场景：`learn-ultra`、深入学习、学习路径、教程、教材式 HTML、交互式学习报告、例题与练习、课程重构，或要求把仓库、论文、文章和多来源资料整理为系统学习材料。
 
 ---
 
