@@ -1,180 +1,160 @@
 ---
 name: prompt-ultra
-description: Inspect, strengthen, and clarify user inputs before executing consequential or medium-to-high-complexity work. Invoke implicitly for any task involving multiple dependent steps, autonomous decisions, ambiguous requirements, material file or system changes, architecture or strategy choices, research synthesis, external side effects, significant cost or risk, or acceptance criteria that are not already explicit; also invoke when the user asks for prompt review, prompt optimization, requirements clarification, task scoping, a task brief, or "prompt-ultra". Build a complete execution contract covering objective, context, deliverable, scope, constraints, evidence, acceptance tests, authority, and exception handling, and resolve material gaps before execution. Skip for simple, low-risk, easily reversible requests whose intent and success condition are obvious.
+description: Turn user intent into an executable work contract and preserve stable working agreements in native persistent instruction files. Use when a request is complex, consequential, ambiguous, multi-stage, or asks for prompt review, requirements clarification, task scoping, acceptance criteria, autonomy boundaries, or a task brief; also use when the user asks an agent to remember, save, migrate, consolidate, audit, create, or update standing instructions such as AGENTS.md, CLAUDE.md, OMP context files, project rules, or personal defaults. Decide whether guidance belongs only to the current task or should persist across sessions, choose the narrowest correct scope, and prevent transient experience from becoming permanent policy without explicit authority and validation.
 ---
 
 # Prompt Ultra
 
-Turn an underspecified complex request into an executable task contract before substantial action. Treat clarity as a gate: inspect first, resolve only material gaps, confirm the resulting contract, then execute.
+Convert human intent into clear working instructions at the correct lifetime and scope. Produce one or both of these artifacts:
 
-## Core rules
+- **Work Contract**: temporary instructions for the current task.
+- **Persistent Work Instructions**: durable agreements saved in a harness-native instruction file and loaded in later sessions.
 
-1. Preserve the user's intent. Strengthen the request without silently expanding its objective, authority, or scope.
-2. Inspect available conversation context and accessible sources before asking the user for information that can be discovered safely.
-3. Ask only questions whose answers could materially change the approach, permissions, risk, deliverable, or acceptance result.
-4. Ask questions in small, prioritized batches. Explain the decision each question controls when that is not obvious.
-5. Record safe defaults as explicit assumptions. Do not block execution on preferences with low consequence.
-6. Do not begin substantive implementation while a critical gap remains. Read-only discovery needed to clarify the task is allowed.
-7. Stop asking when the execution contract is sufficient. Do not seek impossible certainty or repeat an answered question.
-8. If the user explicitly requests immediate action, use safe assumptions for non-critical gaps and proceed; stop only for missing authority, irreversible risk, or choices that would materially change the result.
+Treat persistence as a deliberate operation. Do not save a rule merely because it was useful once.
 
-## 1. Decide whether to gate the task
+When a checkout or host integration exposes the Ultra protocol, form Work
+objects against its versioned Work schema and preserve its core invariants. Do
+not assume the repository-level protocol exists beside a copied skill. A Work
+Contract and Persistent Work Instructions are different projections of Work;
+neither should contain the whole session.
 
-Classify the request before acting.
+## Core invariants
 
-### Gate required
+1. Preserve the user's objective, decision rights, constraints, and authorization. Improve clarity without silently expanding any of them.
+2. Treat explicit user instructions as higher priority than this skill's recommendations. If a skill rule requires a pause or change of direction, identify the exact rule and explain why it applies.
+3. Inspect accessible context before asking questions. Ask only when the answer changes scope, authority, risk, source of truth, or acceptance.
+4. Continue authorized, reversible work until the requested result is complete. Do not stop at capability confirmation, a plan, or partial advice when implementation was requested.
+5. Keep persistent instructions concise, specific, testable, and scoped. Put procedures in skills and mechanical enforcement in hooks, settings, policies, or CI.
+6. Separate instructions from observations. A session event, workaround, local path, failure, or successful tactic is evidence for review; it is not automatically a durable rule.
+7. Never persist secrets, credentials, private payloads, volatile status, unverified claims, or information the target can reliably derive from authoritative files.
+8. Preserve existing instructions and unrelated user changes. Update the smallest relevant section and report conflicts instead of replacing a whole file by default.
 
-Use the full inspection when any condition applies:
+## 1. Select the instruction lifetime
 
-- The work has multiple dependent stages or competing valid approaches.
-- The agent must make product, architecture, research, policy, or business decisions.
-- The task changes important files, data, infrastructure, accounts, or external systems.
-- Failure could cause meaningful loss, disclosure, cost, downtime, compliance risk, or hard-to-reverse effects.
-- The requested deliverable, audience, scope, evidence standard, or acceptance criteria are unclear.
-- The user delegates broad autonomy such as "handle it", "finish it", or "do whatever is needed".
-- The work depends on current facts, third-party coordination, credentials, approvals, or unavailable inputs.
-- The user explicitly requests prompt strengthening or requirements clarification.
+Classify the request before drafting or writing anything.
 
-### Lightweight gate
+| Need | Destination | Action |
+| --- | --- | --- |
+| Simple, clear, low-risk request | Current prompt | Execute directly; do not manufacture a contract. |
+| Complex or consequential current task | Work Contract | Resolve material gaps, then execute against the contract. |
+| Temporary progress needed by another session or agent | Handoff/state artifact | Preserve current state and evidence, not standing behavior. |
+| Stable preference or project convention that should recur | Persistent Work Instructions | Save only with explicit persistence intent. |
+| Repeatable multi-step procedure used on demand | Skill | Create or update a skill instead of loading the procedure every session. |
+| Behavior that must be mechanically enforced | Hook, permission, settings, policy, or CI | Do not claim that Markdown instructions provide enforcement. |
 
-For medium-complexity work with a clear objective, inspect all fields internally, state any consequential assumptions briefly, and ask only about critical gaps. Continue in the same turn when none remain.
+Persistence intent includes requests such as “remember this,” “always do this,” “save this rule,” “update AGENTS.md,” “make this apply to future sessions,” or “migrate my Claude/Codex/OMP instructions.” If persistence was not requested, keep the result in the current task. If persistence was requested but personal, project, local, or subtree scope is materially ambiguous, ask one concise scope question.
 
-### Skip
+## 2. Build the Work Contract
 
-Skip the gate for simple explanations, translations, formatting changes, obvious one-file edits, or other low-risk and reversible tasks with a clear output and success condition. Honor an explicit invocation even for a simple task.
+For a complex current task, inspect conversation context, repository instructions, nearby files, and authoritative sources. Normalize only the applicable fields:
 
-## 2. Build the input map
+- objective and motivation;
+- audience and operating context;
+- inputs and sources of truth;
+- deliverables and destination;
+- included and excluded scope;
+- constraints and priorities;
+- authority, human decision points, and external side effects;
+- evidence and acceptance checks;
+- assumptions, deferred choices, and exception handling.
 
-Extract and normalize these fields from the request and prior context. Do not ask for fields that do not apply.
+Label unresolved information as known, assumed, deferred, or a critical gap. Use safe reversible assumptions for non-critical gaps. Do not begin consequential implementation while a critical gap remains.
 
-| Field | Question to resolve |
-| --- | --- |
-| Objective | What outcome must exist when the task is done? |
-| Motivation | Why is the outcome needed, and which decision or workflow will it support? |
-| Audience | Who will use or evaluate the result, and what do they already know? |
-| Inputs | Which files, data, links, systems, and source-of-truth materials apply? |
-| Deliverable | What artifact, action, format, location, language, and level of detail are required? |
-| Scope | What is included, excluded, and explicitly out of bounds? |
-| Constraints | Which technical, legal, policy, style, time, cost, compatibility, and dependency limits apply? |
-| Evidence | May external sources be used? Must claims be cited, current, reproducible, or based only on supplied material? |
-| Authority | May the agent edit, run tests, install dependencies, access networks, contact people, deploy, publish, or delete? |
-| Acceptance | What observable checks determine success? |
-| Priorities | How should quality, speed, cost, safety, compatibility, and completeness be traded off? |
-| Exceptions | What should happen on missing data, conflicting instructions, failed validation, partial access, or newly discovered risk? |
+Keep the contract proportional to the work. Usually summarize it in a few direct sentences and proceed. Show a structured contract when the user asks for one or when risk, handoff, or multiple decision makers make explicit review useful.
 
-Label each applicable field as:
+## 3. Execute without unnecessary pauses
 
-- **Known**: explicitly supplied or reliably discovered.
-- **Assumed**: a safe, reversible default that does not materially redirect the task.
-- **Critical gap**: missing information that could change the result, authority, or risk.
-- **Deferred**: intentionally decided later under an agreed rule.
+- Interpret action requests such as “help me,” “can you,” and “I want” as authorization to perform the ordinary reversible work required by the stated outcome.
+- Before requesting approval for an irreversible or external action, finish the safe preparation needed to present a concrete reviewable result.
+- Do not request permission again for work already authorized.
+- Keep non-blocking questions separate from progress. Ask a blocking question only when no safe assumption can preserve the user's intent.
+- Set intermediate checkpoints internally for long work; report progress without turning each checkpoint into an approval gate.
+- Match verification to impact. Expand tests only after a relevant failure, new change, or unresolved risk.
+- Lead the final response with the completed outcome, then report checks, consequential assumptions, and unresolved exceptions.
 
-## 3. Resolve ambiguity
+## 4. Extract a durable rule
 
-Before questioning, inspect conversation history, repository instructions, nearby files, provided links, and other read-only evidence within scope. Never use discovery to perform the substantive task early.
+When persistence is requested, do not copy the whole conversation or Work Contract. Extract the smallest future-facing rule that another agent can apply without the original session.
 
-Ask the user when a gap controls one of these decisions:
+A durable instruction should state, where applicable:
 
-- selecting between materially different outputs or implementations;
-- crossing an authorization boundary or causing an external side effect;
-- accepting destructive, security, privacy, financial, legal, or production risk;
-- defining which source is authoritative when sources conflict;
-- determining a success criterion that cannot be inferred from context.
+1. **Condition**: when the rule applies.
+2. **Required behavior**: the observable action or result.
+3. **Boundary**: what is excluded or still requires human approval.
+4. **Verification**: how compliance is checked.
+5. **Rationale**: include only when it prevents likely misapplication.
 
-When asking:
+Prefer “Run `npm test` after changing JavaScript files” over “test carefully.” Avoid recording repository structure, dependency lists, or commands that are already authoritative and easy to discover unless the rule corrects a recurring ambiguity.
 
-1. Lead with the most consequential unresolved decision.
-2. Prefer one to three short questions per round.
-3. Offer a recommended default when alternatives are known.
-4. Make options mutually distinct and state their practical tradeoff.
-5. Incorporate each answer into the input map before asking another round.
+Do not persist:
 
-Do not ask the user to choose implementation details the agent can responsibly determine. Do not ask for confirmation merely to protect the agent from making a normal, reversible decision.
+- current task status, temporary paths, branch names, or one-off deadlines;
+- a workaround whose triggering environment is unknown or likely to change;
+- a preference inferred from one interaction;
+- duplicated guidance already active at the same or broader scope;
+- long procedures that belong in a skill;
+- security claims that require actual enforcement.
 
-## 4. Produce the execution contract
+## 5. Choose scope and native destination
 
-Once no critical gaps remain, present a compact contract proportional to the task:
+Read [references/platform-instructions.md](references/platform-instructions.md) before creating, migrating, or editing persistent instruction files. Inspect the actual instruction chain and relevant environment overrides before choosing a path.
 
-```markdown
-Task: <one-sentence outcome>
+Choose the narrowest scope that reaches every intended future task:
 
-Context and audience:
-- ...
+- **User**: personal defaults across projects.
+- **Project**: team-shared agreements for the repository.
+- **Local project**: private preferences for one checkout.
+- **Subtree**: rules for one package, service, or file family.
+- **Organization**: centrally managed policy; do not write without explicit authority.
 
-Deliverable:
-- ...
+For a portable coding project, prefer a root `AGENTS.md` as the shared source when the target harnesses support it. Add a minimal `CLAUDE.md` containing `@AGENTS.md` when Claude Code must consume the same source. Add harness-specific files only for behavior that genuinely differs. Do not create multiple independent copies of the same rule when an import or supported shared source avoids drift.
 
-In scope:
-- ...
+When the user asks to install, save, export, or migrate **Prompt Ultra itself** as standing behavior, read [references/persistent-core.md](references/persistent-core.md). Merge that baseline into the selected native file instead of copying this entire `SKILL.md`; preserve stricter compatible local rules and omit sections already supplied by a higher-priority instruction source.
 
-Out of scope:
-- ...
+Before editing:
 
-Constraints and authority:
-- ...
+1. Resolve the repository root, current working directory, user home override, active profile, and existing instruction files.
+2. Read every file that can win or contribute at the selected scope.
+3. Identify duplicates, contradictions, stale rules, and rules placed at the wrong scope.
+4. Decide whether to append, amend, relocate, import, or leave unchanged.
+5. Show a proposal first only when the user requested review-only work, the scope remains ambiguous, or the change affects organization policy or a broad user-level file without clear authorization.
 
-Evidence and verification:
-- ...
+## 6. Write and migrate safely
 
-Acceptance criteria:
-- ...
+- Preserve headings and local style when editing an existing file.
+- Make targeted edits; do not regenerate unrelated sections.
+- Keep always-loaded files compact. Split path-specific or procedural detail into native scoped rules or skills when supported.
+- Keep one normative source for shared content. Adapter files should import or point to it and contain only harness-specific additions.
+- Do not use symlinks unless the user requests them and every target harness supports the resulting trust and portability behavior.
+- During migration, compare semantics rather than filenames. Preserve the stricter non-conflicting rule; surface material conflicts for a user decision.
+- Do not delete a legacy source until the destination loads successfully and the user authorized removal.
+- Treat instruction Markdown as behavioral guidance, not a permission boundary. Route hard restrictions to the relevant enforcement surface.
 
-Assumptions:
-- ...
+For coding instructions, read [references/coding-work.md](references/coding-work.md) and include only rules relevant to the target project or user preference.
 
-Exception handling:
-- If <condition>, then <action/report/escalation>.
-```
+## 7. Validate persistence
 
-For high-risk or highly ambiguous work, ask the user to confirm the contract before execution. For medium-complexity work, show the compact contract or summarize the consequential assumptions and proceed in the same turn. Do not require ritual confirmation when the user has already supplied all material decisions.
+After writing or migrating instructions:
 
-## 5. Strengthen the operative prompt
+1. Re-read the final files from disk.
+2. Confirm the chosen file is discoverable at the intended scope and is not shadowed by a higher-priority file.
+3. Check for contradictions across the active instruction chain.
+4. Confirm imports resolve, contain no cycle, and do not expose unintended external files.
+5. Check that every rule is future-facing, specific, and still meaningful without this session.
+6. Confirm secrets and transient details were not persisted.
+7. Use the harness's context/status command when available; otherwise state that runtime loading was not verified.
+8. Report the files changed, effective scope, verification performed, and any restart or new-session requirement.
 
-Convert the contract into direct instructions for execution. Include only applicable clauses:
+## Output contracts
 
-```text
-Complete <specific outcome> for <audience/use case>.
+For a current task, return or internally use a compact Work Contract and then complete the authorized work.
 
-Use <authoritative inputs>. Produce <deliverable and format> at <location, if any>.
-Include <scope>. Exclude <out-of-scope work>.
-Follow <constraints and priorities>. You are authorized to <allowed actions>; do not <forbidden actions>.
-When information is missing but non-critical, use <default> and disclose the assumption.
-When <critical exception> occurs, <stop, retry, choose fallback, or ask>.
-Verify completion with <tests/checks>. The task is complete only when <acceptance criteria>.
+For persistence, report:
 
-Use direct, literal, precise language. Remove repetition, stock phrases, unnecessary setup, ornamental metaphor, and other mannered prose. Keep all decision-relevant facts, caveats, and evidence. Distinguish facts, inferences, assumptions, and recommendations.
-```
+- the durable rule that was saved;
+- the exact destination and effective scope;
+- whether it is shared, personal, local, or harness-specific;
+- how loading and conflicts were checked;
+- any rule deliberately left temporary and why.
 
-Prefer observable instructions over adjectives. Replace "make it professional" with the audience, tone, structure, evidence, and use case. Replace "be concise" with what to preserve, what to remove, and an appropriate length or hierarchy.
-
-## 6. Execute and control drift
-
-After the gate passes:
-
-1. Execute against the contract rather than the user's raw wording alone.
-2. Keep changes and tests within scope. Report useful out-of-scope findings without acting on them.
-3. Treat discovered facts that invalidate an assumption as a new critical gap. Pause only if they materially alter risk, authority, or the agreed result.
-4. Complete the full authorized task, including relevant verification. Do not stop at advice when implementation was requested.
-5. At handoff, report the delivered outcome, verification performed, assumptions used, and unresolved exceptions.
-
-## Quality check
-
-Before execution, confirm:
-
-- The final outcome and deliverable are unambiguous.
-- Background and audience are sufficient for consequential decisions.
-- Inputs and sources of truth are identified.
-- Included and excluded scope are explicit.
-- Constraints, permissions, and external side effects are understood.
-- Evidence requirements and freshness expectations are defined.
-- Acceptance criteria are observable.
-- Missing-data, conflict, failure, and fallback behavior are defined where relevant.
-- Every remaining assumption is safe, reversible, and disclosed.
-- No unresolved critical gap remains.
-
-Before handoff, confirm:
-
-- Every requested output exists.
-- Verification matches the task's risk.
-- Facts, inferences, assumptions, and recommendations are distinguishable.
-- The response is complete but compact and contains no mannered prose.
+For review-only requests, provide findings and a proposed diff without writing files.

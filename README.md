@@ -6,7 +6,7 @@ Ultra 系列 Agent Skills，用于 Qoder / Claude Code / 兼容 SKILL.md 规范�
 
 | 技能 | 用途 | 输出 |
 | --- | --- | --- |
-| [`prompt-ultra`](skills/prompt-ultra) | 在复杂或高影响任务执行前审查输入、澄清关键缺口并建立任务契约 | 强化 Prompt / 澄清问题 / 执行契约 |
+| [`prompt-ultra`](skills/prompt-ultra) | 建立当前任务契约，并把明确要求长期保留的约定迁移到原生持久指令文件 | Work Contract / Persistent Work Instructions |
 | [`learn-ultra`](skills/learn-ultra) | 把 GitHub 仓库、论文或技术文章转成逐模块、逐观点的深度解析报告 | 单文件离线 HTML（TOC 侧栏 + Mermaid + 代码/大白话双栏） |
 | [`figure-ultra`](skills/figure-ultra) | 通用可视化与图片交付，三引擎自动路由 | `.drawio` / `.excalidraw` / PNG / SVG / PDF |
 | [`tikz-ultra`](skills/tikz-ultra) | LaTeX 原生、源码可复现的 TikZ/PGF 绘图工作流 | `.tex` / PDF / PNG / SVG |
@@ -16,7 +16,7 @@ Ultra 系列 Agent Skills，用于 Qoder / Claude Code / 兼容 SKILL.md 规范�
 
 ## prompt-ultra
 
-复杂任务的输入门控技能。在模型需要自主决策，或任务达到中等及以上复杂度、具有重要影响、存在外部副作用时，先把用户输入整理成可执行的任务契约，再开始实质工作。
+复杂任务的工作契约与持久规范技能。它既能在当前任务中澄清目标、权限和验收标准，也能把用户明确要求长期保留的工作约定迁移或保存到 `AGENTS.md`、`CLAUDE.md`、OMP context files 等原生持久指令中。
 
 核心能力：
 
@@ -25,8 +25,12 @@ Ultra 系列 Agent Skills，用于 Qoder / Claude Code / 兼容 SKILL.md 规范�
 - 只追问会实质改变方案、权限、风险或验收结果的问题，避免无休止澄清
 - 对高风险任务先确认契约；对信息充分的中等任务可声明假设后直接执行
 - 将任务契约转换为直接、准确、无套话和无刻意修辞的执行 Prompt
+- 区分当前任务契约、跨 session 交接信息和长期工作规范，避免把一次性经验固化为永久规则
+- 按用户、项目、本地或子目录作用域选择原生文件，并审计加载优先级、覆盖关系和冲突
+- 以单一共享规范源服务 Codex、Claude Code 和 OMP，只保留必要的平台适配内容
+- 将需要硬性执行的要求路由到权限、hooks、policy 或 CI，而不是把 Markdown 指令误当成强制机制
 
-触发场景：`prompt-ultra`、Prompt 优化、需求澄清、任务拆解，以及任何涉及多阶段执行、自主决策、重要修改、架构/策略选择、外部副作用或验收标准不明确的任务。简单、低风险且成功标准显然的请求默认跳过。
+触发场景：`prompt-ultra`、Prompt 优化、需求澄清、任务拆解、多阶段或高影响工作，以及“记住这个规则”“以后都这样”“保存/迁移工作规范”“创建或更新 AGENTS.md / CLAUDE.md”等持久化请求。简单、低风险且成功标准显然的请求默认跳过。
 
 ---
 
