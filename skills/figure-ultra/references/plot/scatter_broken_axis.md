@@ -53,6 +53,6 @@ ax1.legend(handles=legend_elements, loc='lower right',
            frameon=True, facecolor='white', edgecolor='#CCCCCC')
 ```
 
-## 复现文件
-- `repro/scatter_break.py`
-- `repro/scatter_break_repro.png`
+## 脚本
+
+运行 `scripts/plot/scatter_break.py --out-dir OUTPUT_DIRECTORY`。

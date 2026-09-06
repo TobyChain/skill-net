@@ -4,9 +4,21 @@ Style: sans-serif, dashed octagonal grid, white-bg value annotations,
        semi-transparent fill, legend: black text + colored line segment.
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the dual-series radar example.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_path = args.out_dir / "radar_dora_repro.png"
 
 plt.rcParams.update({
     'font.family': 'sans-serif',
@@ -56,7 +68,7 @@ def close(arr):
 
 # 原图 1032×850 → 宽高比 1.21
 fig, ax = plt.subplots(figsize=(7.0, 5.8),
-                       subplot_kw=dict(projection='polar'))
+                       subplot_kw={'projection': 'polar'})
 
 ax.set_theta_zero_location('N')
 ax.set_theta_direction(-1)
@@ -97,15 +109,15 @@ for i, ang in enumerate(angles):
     ax.text(ang, r_d, fmt(DORA_raw[i]),
             ha='center', va='center',
             fontsize=7.8, color=C_DORA, zorder=6,
-            bbox=dict(boxstyle='round,pad=0.12',
-                      facecolor='white', edgecolor='none', alpha=0.85))
+            bbox={'boxstyle': 'round,pad=0.12',
+                  'facecolor': 'white', 'edgecolor': 'none', 'alpha': 0.85})
     # LoRA 数值（折线内侧）
     r_l = lora_r[i] - 0.09
     ax.text(ang, r_l, fmt(LORA_raw[i]),
             ha='center', va='center',
             fontsize=7.8, color=C_LORA, zorder=6,
-            bbox=dict(boxstyle='round,pad=0.12',
-                      facecolor='white', edgecolor='none', alpha=0.85))
+            bbox={'boxstyle': 'round,pad=0.12',
+                  'facecolor': 'white', 'edgecolor': 'none', 'alpha': 0.85})
 
 # ---- 轴标签 ----
 # 原图 label 紧贴多边形外圈（约 1.13），字体相对图幅偏小
@@ -144,8 +156,8 @@ ax.set_frame_on(False)
 
 fig.subplots_adjust(left=0.10, right=0.90, top=0.86, bottom=0.06)
 fig.savefig(
-    '/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/radar_dora_repro.png',
+    output_path,
     dpi=300, facecolor='white',
 )
 plt.close(fig)
-print('saved: radar_dora_repro.png')
+print(f'saved: {output_path.resolve()}')

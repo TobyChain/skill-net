@@ -17,7 +17,6 @@ Example:
 """
 
 import json
-import os
 import re
 import sys
 from pathlib import Path
@@ -98,7 +97,7 @@ def split_library(library_dir: str) -> None:
     print(f"Found library: {library_path.name}")
 
     # Load library file
-    print(f"Loading library data...")
+    print("Loading library data...")
     with open(library_path, 'r', encoding='utf-8') as f:
         library_data = json.load(f)
 
@@ -151,8 +150,7 @@ def split_library(library_dir: str) -> None:
         f.write("| Icon Name | Filename |\n")
         f.write("|-----------|----------|\n")
 
-        for icon in icon_list:
-            f.write(f"| {icon['name']} | `icons/{icon['filename']}` |\n")
+        f.writelines(f"| {icon['name']} | `icons/{icon['filename']}` |\n" for icon in icon_list)
 
         f.write("\n## Usage\n\n")
         f.write("Each icon JSON file contains the complete `elements` array needed to render that icon in Excalidraw.\n")

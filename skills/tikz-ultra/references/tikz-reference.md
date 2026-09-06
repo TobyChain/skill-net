@@ -5,6 +5,14 @@ PDF in `../assets/tikz-cheatsheet.pdf` for the original rendered examples.
 The source document identifies itself as "TikZ 速查表" by 五道口纳什 and
 targets PGF/TikZ 3.1.11 with XeLaTeX.
 
+## Contents
+
+- Core commands, paths, coordinates, and styling
+- Nodes, matrices, positioning, and reusable styles
+- Libraries for graphs, plots, decorations, and 3D work
+- Common figure patterns and compilation commands
+- Debugging and export checks
+
 ## Core Commands
 
 All drawing commands are path operations:

@@ -3,15 +3,16 @@
 
 from __future__ import annotations
 
+import io
+import sys
 import tempfile
 import unittest
-import sys
+from contextlib import redirect_stdout
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from validate_learning_html import main
-
 
 BASE_HTML = """<!doctype html>
 <html lang="zh-CN">
@@ -36,7 +37,8 @@ class ValidatorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "report.html"
             path.write_text(source, encoding="utf-8")
-            return main(str(path), [], formula, diagram)
+            with redirect_stdout(io.StringIO()):
+                return main(str(path), [], formula, diagram)
 
     def test_base_artifact_does_not_require_formula_or_diagram(self) -> None:
         """Conceptual lessons may omit irrelevant formulas and diagrams."""

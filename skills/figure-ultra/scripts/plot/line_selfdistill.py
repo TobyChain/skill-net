@@ -5,19 +5,33 @@ image3: 离散点折线 + 置信区间阴影（模型规模 scaling）
 来源：Reinforcement learning via self-distillation
 """
 
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-import numpy as np
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the self-distillation line examples.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib import ticker
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_v6 = args.out_dir / "line_selfdistill_v6_repro.png"
+output_scaling = args.out_dir / "line_selfdistill_scaling_repro.png"
 
 # ── 预分析结论 ─────────────────────────────────────────────
-# 字体：serif，接近 LaTeX Computer Modern，启用 usetex
+# 字体：使用 Matplotlib 自带 serif 字体，避免依赖系统 LaTeX
 # 加粗：标题 normal | 图例 SDPO bold | 其他 normal
 # Spine：只保留左/下（开口式）
 # Grid：无
 # 颜色：绿 #3A8B3A (SDPO) | 蓝 #3B6BB5 (GRPO) | 灰 #999999 (base)
 # 阴影：主线颜色 alpha=0.15 的半透明填充
 plt.rcParams.update({
-    'text.usetex': True,
+    'text.usetex': False,
     'font.family': 'serif',
     'font.serif': ['Computer Modern Roman', 'STIX Two Text', 'DejaVu Serif'],
     'axes.unicode_minus': False,
@@ -60,7 +74,7 @@ ax2.fill_between(steps, sdpo_mean - sdpo_std, sdpo_mean + sdpo_std,
                  color=C_SDPO, alpha=0.20)
 ax2.fill_between(steps, grpo_mean - grpo_std, grpo_mean + grpo_std,
                  color=C_GRPO, alpha=0.20)
-ax2.plot(steps, sdpo_mean, color=C_SDPO, lw=2.5, label=r'\textbf{SDPO}')
+ax2.plot(steps, sdpo_mean, color=C_SDPO, lw=2.5, label='SDPO')
 ax2.plot(steps, grpo_mean, color=C_GRPO, lw=2.5, label='GRPO')
 # 原图 Claude 参考线为稀疏圆点线，非虚线
 ax2.axhline(0.406, color='#AAAAAA', lw=1.8,
@@ -92,10 +106,10 @@ ax2.tick_params(direction='in', length=5, width=1.2, labelsize=11)
 ax2.grid(False)
 
 fig2.tight_layout(pad=0.9)
-fig2.savefig('/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/line_selfdistill_v6_repro.png',
+fig2.savefig(output_v6,
              dpi=300, facecolor='white')
 plt.close(fig2)
-print('saved: line_selfdistill_v6_repro.png')
+print(f'saved: {output_v6.resolve()}')
 
 # ══════════════════════════════════════════════════════════
 # 图 3：模型 scaling 折线（Model scaling Qwen3）
@@ -126,7 +140,7 @@ MEC = 'black'   # 原图标记点有黑色描边
 ax3.plot(x_pos, sdpo_pts, color=C_SDPO, lw=2.5,
          marker='o', ms=7, mfc=C_SDPO,
          markeredgecolor=MEC, markeredgewidth=1.0,
-         label=r'\textbf{SDPO}')
+         label='SDPO')
 ax3.plot(x_pos, grpo_pts, color=C_GRPO, lw=2.5,
          marker='o', ms=7, mfc=C_GRPO,
          markeredgecolor=MEC, markeredgewidth=1.0,
@@ -141,7 +155,7 @@ ax3.set_xticklabels(param_labels, fontsize=11)
 ax3.set_xlim(-0.35, 3.35)
 ax3.set_ylim(0.08, 0.51)   # 与原图 0.1~0.5 刻度对齐，留极小顶部空
 ax3.set_xlabel('Model parameters (B)', fontsize=13)
-ax3.set_ylabel(r'\textit{Accuracy}', fontsize=13)
+ax3.set_ylabel('Accuracy', fontsize=13, fontstyle='italic')
 ax3.set_title('Model scaling (Qwen3)', fontsize=15, pad=7)
 ax3.yaxis.set_major_locator(ticker.MultipleLocator(0.1))
 
@@ -162,7 +176,7 @@ ax3.tick_params(direction='in', length=5, width=1.2, labelsize=11)
 ax3.grid(False)
 
 fig3.tight_layout(pad=0.9)
-fig3.savefig('/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/line_selfdistill_scaling_repro.png',
+fig3.savefig(output_scaling,
              dpi=300, facecolor='white')
 plt.close(fig3)
-print('saved: line_selfdistill_scaling_repro.png')
+print(f'saved: {output_scaling.resolve()}')

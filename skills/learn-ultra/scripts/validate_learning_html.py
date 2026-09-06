@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import argparse
 import re
-import sys
 from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
+
 
 class AuditParser(HTMLParser):
     def __init__(self):
@@ -81,7 +81,7 @@ def main(path_string, required_ids, require_formula, require_diagram):
             errors.append("missing " + name)
     if re.search(r"\{\{[A-Z][A-Z0-9_]*\}\}", source):
         errors.append("unresolved template placeholder")
-    if re.search(r"^\+\s*$", source, re.M):
+    if re.search(r"^\+\s*$", source, re.MULTILINE):
         errors.append("orphan patch marker +")
     objective_ids = set(parser.declared_objectives)
     assessed_ids = set(parser.assessed_objectives)

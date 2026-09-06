@@ -29,7 +29,7 @@
 2. 选择对应风格（不确定时根据数据形状推断，或询问用户）
 3. 读取 `references/plot/<style_name>.md` 获取精确参数（rcParams、配色、字号、spine、刻度方向）
 4. 复制对应 `scripts/plot/<script>.py`，替换数据区（脚本顶部注释清晰标注数据区）
-5. 运行 `python3 scripts/plot/<script>.py`
+5. 运行 `python3 scripts/plot/<script>.py --out-dir OUTPUT_DIRECTORY`；省略参数时输出到当前目录
 6. 检查输出，必要时微调颜色/标签/字号
 
 ## 数据替换规则

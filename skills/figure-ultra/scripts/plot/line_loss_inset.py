@@ -5,14 +5,26 @@ Inset: zoomed blue+green in right panel.
 Style: serif, tab10 colors, black dashed connection lines.
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib.patches import ConnectionPatch, FancyArrowPatch
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset, inset_axes
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the loss curve with an inset.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.patches as mpatches
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.patches import ConnectionPatch
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_path = args.out_dir / "line_loss_inset_repro.png"
 
 plt.rcParams.update({
-    'text.usetex': True,
+    'text.usetex': False,
     'font.family': 'serif',
     'font.serif': ['Computer Modern Roman', 'STIX Two Text', 'DejaVu Serif'],
     'axes.unicode_minus': False,
@@ -150,8 +162,8 @@ fig.add_artist(con1)
 fig.add_artist(con2)
 
 fig.savefig(
-    '/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/line_loss_inset_repro.png',
+    output_path,
     dpi=300, facecolor='white',
 )
 plt.close(fig)
-print('saved: line_loss_inset_repro.png')
+print(f'saved: {output_path.resolve()}')

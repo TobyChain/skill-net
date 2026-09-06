@@ -4,9 +4,21 @@ Two lines with vertical breakpoint markers + horizontal reference line.
 Style: sans-serif, 4-spine box, no grid, right-bottom legend.
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the training-curve example.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_path = args.out_dir / "line_aime_repro.png"
 
 plt.rcParams.update({
     'font.family': 'sans-serif',
@@ -87,8 +99,8 @@ leg = ax.legend(
 
 fig.tight_layout(pad=0.8)
 fig.savefig(
-    '/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/line_aime_repro.png',
+    output_path,
     dpi=300, facecolor='white',
 )
 plt.close(fig)
-print('saved: line_aime_repro.png')
+print(f'saved: {output_path.resolve()}')

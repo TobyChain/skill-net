@@ -1,0 +1,6 @@
+interface:
+  display_name: "TikZ Ultra"
+  short_description: "创建、调试并编译以 TikZ 或 LaTeX 为原生源的图形"
+  default_prompt: "Use $tikz-ultra to create or revise this figure as verified TikZ or LaTeX source."
+policy:
+  allow_implicit_invocation: true

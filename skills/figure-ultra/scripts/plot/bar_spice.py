@@ -4,20 +4,32 @@
 来源：SPICE: Self-play in corpus environments improves reasoning
 """
 
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import numpy as np
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the grouped-hatch bar example.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.patches as mpatches
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_path = args.out_dir / "bar_spice_repro.png"
 
 # ── 预分析结论 ─────────────────────────────────────────────
-# 字体：原图更接近 LaTeX/Computer Modern，而不是 Times
-#       这里直接启用 usetex，优先还原论文图常见的 TeX 字体气质
+# 字体：使用 Matplotlib 自带 serif 字体，避免依赖系统 LaTeX
 # 加粗：面板标题(normal) | 图例 SPICE 条目(bold) | 其他图例(normal)
 #       主方法数值(bold+深红) | 其他数值(normal+黑)
 # 间距：三柱较细，组间留白明显，子图整体更扁，接近原图长宽比
 # 边框：四边框都保留，且柱子层级低于边框
 # 分辨率：300 dpi
 plt.rcParams.update({
-    'text.usetex': True,
+    'text.usetex': False,
     'font.family': 'serif',
     'font.serif': ['Computer Modern Roman', 'STIX Two Text', 'DejaVu Serif'],
     'axes.unicode_minus': False,
@@ -65,7 +77,6 @@ def draw_panel(
     xlim,
     legend_anchor,
 ):
-    n_groups  = len(benchmarks)
     n_methods = len(labels)
     x         = np.array(x_positions)
     bar_w     = total_w / n_methods
@@ -159,7 +170,7 @@ draw_panel(
     legend_anchor=(0.992, 0.986),
 )
 
-plt.savefig('/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/bar_spice_repro.png',
+plt.savefig(output_path,
             dpi=300, facecolor='white')
 plt.close()
-print('saved: bar_spice_repro.png')
+print(f'saved: {output_path.resolve()}')

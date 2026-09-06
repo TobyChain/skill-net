@@ -69,7 +69,7 @@ python scripts/add-icon-to-diagram.py <图路径> <图标名> <x> <y> --label "W
 python scripts/add-arrow.py <图路径> <x1> <y1> <x2> <y2> --label "HTTPS" --style dashed --color "#7950f2"
 ```
 
-脚本优势：图标 JSON（每个 200-1000 行）不进上下文、坐标变换确定性、自动 id 管理。脚本细节见 `scripts/README.md`。
+脚本优势：图标 JSON（每个 200-1000 行）不进上下文、坐标变换确定性、自动 id 管理。脚本细节见 [icon-tools.md](icon-tools.md)。
 
 ## 常见问题
 

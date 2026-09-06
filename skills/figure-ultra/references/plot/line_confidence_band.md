@@ -2,7 +2,7 @@
 
 **来源论文**：Reinforcement learning via self-distillation  
 **图表类型**：折线图（连续训练曲线 / 离散 scaling 曲线）+ 半透明置信区间阴影  
-**复现代码**：`repro/line_selfdistill.py`  
+**脚本**：`scripts/plot/line_selfdistill.py`
 **原图**：`image2.png`（连续），`image3.png`（离散 scaling）
 
 ---
@@ -14,7 +14,7 @@
 - **线宽**：主方法 1.8，次要方法 1.8，base model 1.4
 - **标记点**（scaling 图）：实心圆 `marker='o'`，大小 6pt
 - **参考线**（训练曲线图）：水平灰色虚线 `ls='--'`，代表 baseline 性能
-- **字体**：LaTeX serif（usetex=True），标题 normal weight，图例主方法 bold
+- **字体**：Matplotlib serif，标题 normal weight，图例主方法 bold
 - **Spine**：只保留左/下（开口式），线宽 0.9，颜色黑
 - **Grid**：无
 - **图例**：无边框（`framealpha=0, edgecolor='none'`），位于图内
@@ -25,7 +25,7 @@
 
 ```python
 plt.rcParams.update({
-    'text.usetex': True,
+    'text.usetex': False,
     'font.family': 'serif',
     'font.serif': ['Computer Modern Roman', 'STIX Two Text', 'DejaVu Serif'],
 })
@@ -38,7 +38,7 @@ C_BASE = '#999999'
 ax.fill_between(x, mean - std, mean + std, color=C_SDPO, alpha=0.15)
 
 # 折线
-ax.plot(x, mean, color=C_SDPO, lw=1.8, label=r'\textbf{SDPO}')
+ax.plot(x, mean, color=C_SDPO, lw=1.8, label='SDPO')
 
 # 只保留左/下 spine
 for side, sp in ax.spines.items():

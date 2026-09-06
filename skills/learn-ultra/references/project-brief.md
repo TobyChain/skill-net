@@ -10,7 +10,7 @@ Keep this working record outside the learner-facing artifact.
 - Deliverable and working directory:
 - Access, tooling, time, or licensing limits:
 - Interview completed or skipped; assumptions made:
-- Planned rounds: two by default for substantial work, three only when justified:
+- Planned review: one complete round; additional rounds and their evidence-based reason:
 
 ## Requirement table
 

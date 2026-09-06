@@ -1,0 +1,62 @@
+{
+  "figure-ultra": {
+    "should_trigger": [
+      "Create an editable Draw.io architecture diagram and export it to SVG.",
+      "Plot these CSV values as a publication-ready grouped bar chart.",
+      "Turn this workflow into an Excalidraw whiteboard sketch."
+    ],
+    "should_not_trigger": [
+      "Write this diagram as a TikZ picture in a .tex file.",
+      "Rewrite the introduction of my academic paper.",
+      "Teach me this repository with examples and exercises."
+    ]
+  },
+  "learn-ultra": {
+    "should_trigger": [
+      "Teach me this repository and include worked examples and exercises.",
+      "Turn this paper into a source-grounded Chinese tutorial.",
+      "Restructure these documents into a progressive learning path."
+    ],
+    "should_not_trigger": [
+      "Summarize this article in three bullets.",
+      "Polish the abstract of my manuscript.",
+      "Draw an architecture diagram from these components."
+    ]
+  },
+  "paper-ultra": {
+    "should_trigger": [
+      "Rewrite this paper abstract while preserving every number and citation.",
+      "Draft a response to these reviewer comments.",
+      "Synchronize the Chinese and English versions of this methods section."
+    ],
+    "should_not_trigger": [
+      "Create a tutorial from this paper with exercises.",
+      "Plot these experiment results as a radar chart.",
+      "Clarify the authority and acceptance criteria for this coding task."
+    ]
+  },
+  "prompt-ultra": {
+    "should_trigger": [
+      "Turn this multi-stage migration into a scoped work contract.",
+      "Remember this coding convention for future sessions.",
+      "Audit and migrate our AGENTS.md and CLAUDE.md instructions."
+    ],
+    "should_not_trigger": [
+      "Fix this typo in one file.",
+      "Create a Draw.io flowchart.",
+      "Review the prose in my paper abstract."
+    ]
+  },
+  "tikz-ultra": {
+    "should_trigger": [
+      "Create this commutative diagram as a tikzpicture.",
+      "Debug the compilation error in this existing TikZ figure.",
+      "Deliver a reproducible .tex figure and its compiled PDF."
+    ],
+    "should_not_trigger": [
+      "Draw a generic architecture diagram as a PNG.",
+      "Plot this CSV as a Matplotlib line chart.",
+      "Rewrite the results section of my paper."
+    ]
+  }
+}

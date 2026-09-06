@@ -4,7 +4,7 @@
 高维 embedding 经 t-SNE 降维后的聚类可视化，多类别、带标注框的散点图。
 
 ## 视觉特征
-- 字体：serif + `usetex=True`（Computer Modern），无 TeX 可用 `STIX Two Text`
+- 字体：Matplotlib serif（优先 STIX Two Text / DejaVu Serif），不依赖系统 LaTeX
 - 标题：两行粗体，约 13.5pt
 - 轴标签：粗体，约 12pt
 - 刻度：常规，约 10pt
@@ -31,7 +31,7 @@ DS_COLORS = {
 ## 关键参数
 ```python
 plt.rcParams.update({
-    'text.usetex': True,
+    'text.usetex': False,
     'font.family': 'serif',
     'font.serif': ['Computer Modern Roman', 'STIX Two Text'],
 })
@@ -41,7 +41,7 @@ ax.scatter(x, y, c=color, s=14, alpha=0.55, linewidths=0, rasterized=True)
 # 注释框（聚类标签）
 import matplotlib.colors as mcolors
 rgba = list(mcolors.to_rgba(color)); rgba[3] = 0.28
-ax.annotate(r'\textbf{Name}', xy=...,
+ax.annotate('Name', xy=..., fontweight='bold',
     bbox=dict(boxstyle='round,pad=0.30',
               facecolor=tuple(rgba),
               edgecolor='#2C3E50', linewidth=0.9))
@@ -57,6 +57,6 @@ ax.tick_params(direction='in', length=4, width=0.8)
 ax.grid(True, color='#E0E0E0', linewidth=0.6, linestyle=':', zorder=0)
 ```
 
-## 复现文件
-- `repro/scatter_tsne.py`
-- `repro/scatter_tsne_repro.png`
+## 脚本
+
+运行 `scripts/plot/scatter_tsne.py --out-dir OUTPUT_DIRECTORY`。

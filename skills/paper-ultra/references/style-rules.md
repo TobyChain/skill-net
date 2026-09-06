@@ -1,5 +1,13 @@
 # Reader-first academic style rules
 
+## Contents
+
+- Respect source style and edit scope
+- Direct propositions and meaningful consequences
+- Reader-facing terminology and sentence structure
+- Evidence, numbers, claims, and contribution attribution
+- Bilingual consistency and final prose review
+
 ## Respect source style and edit scope
 
 When a project supplies a writing guide, venue convention, terminology policy, or verified author sample, use it to interpret the author’s intended voice. Generic AI-voice warnings must not erase a deliberate punctuation habit, sentence pattern, disciplinary convention, or level of formality.

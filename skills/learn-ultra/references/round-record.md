@@ -15,5 +15,5 @@ Keep this outside the learner-facing artifact.
 
 - Actual emphasis versus plan:
 - Requirements complete / needs revision / blocked:
-- Reason for a third round, if any:
+- Reason for an additional round, if any:
 - Remaining targeted work:

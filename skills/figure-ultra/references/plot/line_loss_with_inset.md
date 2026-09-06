@@ -4,7 +4,7 @@
 训练 loss 曲线，需要放大局部区域对比细节差异，通过 inset 子图实现局部放大。
 
 ## 视觉特征
-- 字体：serif + `usetex=True`（Computer Modern）
+- 字体：Matplotlib serif，不依赖系统 LaTeX
 - 主图：L 形 spine（仅左+下），**带轴端箭头**
 - Inset：四边全显，较粗 spine（1.2pt）
 - 连接线：黑色虚线（`color='#333333', linestyle='--', lw=0.8`）
@@ -54,6 +54,6 @@ ax_main.legend(loc='upper right', frameon=True,
 - Inset 的 Y 轴范围应与 zoom box 的 Y 范围以及蓝线峰值综合决定，不要设太大导致大量空白
 - 主图 Y 轴底部不从 0 开始（从实际数据 minimum 开始），与原图对齐
 
-## 复现文件
-- `repro/line_loss_inset.py`
-- `repro/line_loss_inset_repro.png`
+## 脚本
+
+运行 `scripts/plot/line_loss_inset.py --out-dir OUTPUT_DIRECTORY`。

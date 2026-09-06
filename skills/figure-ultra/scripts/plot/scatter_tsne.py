@@ -1,15 +1,27 @@
 """
 Reproduce: image7.png — t-SNE Latent Memory Visualization
-Style: serif (Computer Modern via usetex), light gray grid,
+Style: serif, light gray grid,
        4-spine box, annotation boxes with cluster color edges.
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the t-SNE cluster example.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_path = args.out_dir / "scatter_tsne_repro.png"
 
 plt.rcParams.update({
-    'text.usetex': True,
+    'text.usetex': False,
     'font.family': 'serif',
     'font.serif': ['Computer Modern Roman', 'STIX Two Text', 'DejaVu Serif'],
     'axes.unicode_minus': False,
@@ -68,25 +80,24 @@ for ann in ANNOTS:
     rgba = list(mcolors.to_rgba(color))
     rgba[3] = 0.28   # alpha for facecolor
     ax.annotate(
-        r'\textbf{' + ann['name'] + r'}',
+        ann['name'],
         xy=ann['xy'], xytext=ann['xytext'],
-        fontsize=10.0,
-        bbox=dict(
-            boxstyle='round,pad=0.30',
-            facecolor=tuple(rgba),
-            edgecolor=BBOX_EDGECOLOR,
-            linewidth=0.9,
-        ),
+        fontsize=10.0, fontweight='bold',
+        bbox={
+            'boxstyle': 'round,pad=0.30',
+            'facecolor': tuple(rgba),
+            'edgecolor': BBOX_EDGECOLOR,
+            'linewidth': 0.9,
+        },
         ha='center', va='center', zorder=5,
     )
 
 # ---- Axes 样式 ----
-ax.set_xlabel(r'\textbf{t-SNE Component 1}', fontsize=12)
-ax.set_ylabel(r'\textbf{t-SNE Component 2}', fontsize=12)
+ax.set_xlabel('t-SNE Component 1', fontsize=12, fontweight='bold')
+ax.set_ylabel('t-SNE Component 2', fontsize=12, fontweight='bold')
 ax.set_title(
-    r'\textbf{Latent Memory Visualization}' + '\n'
-    r'\textbf{(across all benchmarks)}',
-    fontsize=13.5, pad=8, linespacing=1.4,
+    'Latent Memory Visualization\n(across all benchmarks)',
+    fontsize=13.5, fontweight='bold', pad=8, linespacing=1.4,
 )
 
 ax.set_xlim(-88, 70)
@@ -126,8 +137,8 @@ leg = ax.legend(
 
 fig.tight_layout(pad=0.9)
 fig.savefig(
-    '/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/scatter_tsne_repro.png',
+    output_path,
     dpi=300, facecolor='white',
 )
 plt.close(fig)
-print('saved: scatter_tsne_repro.png')
+print(f'saved: {output_path.resolve()}')

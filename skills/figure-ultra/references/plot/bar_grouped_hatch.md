@@ -2,7 +2,7 @@
 
 **来源论文**：SPICE: Self-play in corpus environments improves reasoning  
 **图表类型**：分组柱状图（每组 3 柱，主方法使用斜线填充强调）  
-**复现代码**：`repro/bar_spice.py`  
+**脚本**：`scripts/plot/bar_spice.py`
 **原图**：`image5.png`
 
 ---
@@ -47,16 +47,16 @@ legend_bbox = (0.992, 0.986)         # 图例框贴近右上角，但不压边
 
 | 元素 | 字体族 | 字号 | 加粗 |
 |------|--------|------|------|
-| 面板标题（"(a) SPICE Ablations"） | LaTeX serif（Computer Modern 风格） | 13.2 | **否**（正常细体）|
-| 图例文字（非主方法） | LaTeX serif（Computer Modern 风格） | 9.2 | 否 |
-| 图例文字（主方法 "SPICE"） | LaTeX serif（Computer Modern 风格） | 9.2 | **是** |
-| 柱顶数值（非主方法） | LaTeX serif（Computer Modern 风格） | 8.7 | 否，黑色 |
-| 柱顶数值（主方法） | LaTeX serif（Computer Modern 风格） | 8.7 | **是**，深红色 `#8B0000` |
-| 轴标签 / 刻度 | LaTeX serif（Computer Modern 风格） | 10.8-11.2 | 否 |
+| 面板标题（"(a) SPICE Ablations"） | Matplotlib serif | 13.2 | **否**（正常细体）|
+| 图例文字（非主方法） | Matplotlib serif | 9.2 | 否 |
+| 图例文字（主方法 "SPICE"） | Matplotlib serif | 9.2 | **是** |
+| 柱顶数值（非主方法） | Matplotlib serif | 8.7 | 否，黑色 |
+| 柱顶数值（主方法） | Matplotlib serif | 8.7 | **是**，深红色 `#8B0000` |
+| 轴标签 / 刻度 | Matplotlib serif | 10.8-11.2 | 否 |
 
 ```python
 plt.rcParams.update({
-    'text.usetex': True,
+    'text.usetex': False,
     'font.family': 'serif',
     'font.serif': ['Computer Modern Roman', 'STIX Two Text', 'DejaVu Serif'],
     'axes.unicode_minus': False,

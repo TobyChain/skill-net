@@ -51,6 +51,6 @@ fig.text(0.09, 0.90, '────  ', color=C_DORA, fontsize=12, fontweight='bo
 fig.text(0.155, 0.90, 'DoRA',  color='black',  fontsize=11, fontweight='bold')
 ```
 
-## 复现文件
-- `repro/radar_dora.py`
-- `repro/radar_dora_repro.png`
+## 脚本
+
+运行 `scripts/plot/radar_dora.py --out-dir OUTPUT_DIRECTORY`。

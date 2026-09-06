@@ -4,11 +4,22 @@ X-axis has a break between ~50k and 115k.
 Uses two side-by-side axes with shared y-axis.
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import matplotlib.lines as mlines
-from scipy.interpolate import make_interp_spline
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the broken-axis scatter example.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.lines as mlines
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_path = args.out_dir / "scatter_break_repro.png"
 
 plt.rcParams.update({
     'font.family': 'sans-serif',
@@ -68,11 +79,8 @@ for ax in [ax1, ax2]:
 # ---- 左轴（ax1：0 - 50k）----
 ax1.set_xlim(-3000, 53000)
 
-# Few-shot 样条曲线（原图明显为 S 形平滑曲线）
-spl = make_interp_spline(few_x, few_y, k=3)
-spl_x = np.linspace(few_x[0], few_x[-1], 300)
-spl_y = spl(spl_x)
-ax1.plot(spl_x, spl_y, color=C_FEW_LINE, lw=1.8, zorder=2)
+# Few-shot 折线，避免为装饰性平滑引入 SciPy 依赖
+ax1.plot(few_x, few_y, color=C_FEW_LINE, lw=1.8, zorder=2)
 ax1.scatter(few_x, few_y,
             marker='o', s=70, color=C_FEW,
             zorder=4, linewidths=0.8, edgecolors='black')
@@ -124,10 +132,10 @@ ax2.spines['bottom'].set_linewidth(1.0)
 
 # ---- 折断符号（只在 x 轴底部，不在顶部）----
 d = 0.015
-kwargs = dict(transform=ax1.transAxes, color='k', clip_on=False, lw=1.2)
+kwargs = {'transform': ax1.transAxes, 'color': 'k', 'clip_on': False, 'lw': 1.2}
 ax1.plot((1 - d, 1 + d), (-d, +d), **kwargs)   # 底部斜杠
 
-kwargs2 = dict(transform=ax2.transAxes, color='k', clip_on=False, lw=1.2)
+kwargs2 = {'transform': ax2.transAxes, 'color': 'k', 'clip_on': False, 'lw': 1.2}
 ax2.plot((-d, +d), (-d, +d), **kwargs2)         # 底部斜杠
 
 # ---- 图例（右下角，有浅灰框）----
@@ -162,8 +170,8 @@ leg = ax1.legend(
 )
 
 fig.savefig(
-    '/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/scatter_break_repro.png',
+    output_path,
     dpi=300, facecolor='white',
 )
 plt.close(fig)
-print('saved: scatter_break_repro.png')
+print(f'saved: {output_path.resolve()}')

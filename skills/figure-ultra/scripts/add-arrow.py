@@ -9,20 +9,19 @@ Options:
     --style {solid|dashed|dotted}    Arrow line style (default: solid)
     --color HEX                      Arrow color (default: #1e1e1e)
     --label TEXT                     Add text label on the arrow
-    --use-edit-suffix                Edit via .excalidraw.edit to avoid editor overwrite issues (enabled by default; use --no-use-edit-suffix to disable)
-
 Examples:
     python add-arrow.py diagram.excalidraw 300 200 500 300
     python add-arrow.py diagram.excalidraw 300 200 500 300 --label "HTTP"
     python add-arrow.py diagram.excalidraw 300 200 500 300 --style dashed --color "#7950f2"
-    python add-arrow.py diagram.excalidraw 300 200 500 300 --use-edit-suffix
 """
 
+from __future__ import annotations
+
 import json
+import shutil
 import sys
 import uuid
 from pathlib import Path
-from typing import Dict, Any
 
 
 def generate_unique_id() -> str:
@@ -30,40 +29,21 @@ def generate_unique_id() -> str:
     return str(uuid.uuid4()).replace('-', '')[:16]
 
 
-def prepare_edit_path(diagram_path: Path, use_edit_suffix: bool) -> tuple[Path, Path | None]:
-    """
-    Prepare a safe edit path to avoid editor overwrite issues.
-
-    Returns:
-        (work_path, final_path)
-        - work_path: file path to read/write during edit
-        - final_path: file path to rename back to (or None if not used)
-    """
-    if not use_edit_suffix:
-        return diagram_path, None
-
-    if diagram_path.suffix != ".excalidraw":
-        return diagram_path, None
-
+def prepare_edit_path(diagram_path: Path) -> Path:
+    """Copy the source to a same-directory work file for atomic replacement."""
     edit_path = diagram_path.with_suffix(diagram_path.suffix + ".edit")
 
+    if edit_path.exists():
+        raise FileExistsError(f"Edit file already exists: {edit_path}")
     if diagram_path.exists():
-        if edit_path.exists():
-            raise FileExistsError(f"Edit file already exists: {edit_path}")
-        diagram_path.rename(edit_path)
+        shutil.copy2(diagram_path, edit_path)
 
-    return edit_path, diagram_path
+    return edit_path
 
 
-def finalize_edit_path(work_path: Path, final_path: Path | None) -> None:
-    """Finalize edit by renaming .edit back to .excalidraw if needed."""
-    if final_path is None:
-        return
-
-    if final_path.exists():
-        final_path.unlink()
-
-    work_path.rename(final_path)
+def finalize_edit_path(work_path: Path, final_path: Path) -> None:
+    """Atomically replace the original after the edited JSON is complete."""
+    work_path.replace(final_path)
 
 
 def create_arrow(
@@ -73,7 +53,7 @@ def create_arrow(
     to_y: float,
     style: str = "solid",
     color: str = "#1e1e1e",
-    label: str = None
+    label: str | None = None
 ) -> list:
     """
     Create an arrow element.
@@ -189,7 +169,7 @@ def add_arrow_to_diagram(
     to_y: float,
     style: str = "solid",
     color: str = "#1e1e1e",
-    label: str = None
+    label: str | None = None
 ) -> None:
     """
     Add an arrow to an Excalidraw diagram.
@@ -224,11 +204,11 @@ def add_arrow_to_diagram(
     print(f"  Added {len(arrow_elements)} elements (total: {original_count} -> {len(diagram['elements'])})")
     
     # Save diagram
-    print(f"Saving diagram")
+    print("Saving diagram")
     with open(diagram_path, 'w', encoding='utf-8') as f:
         json.dump(diagram, f, indent=2, ensure_ascii=False)
     
-    print(f"✓ Successfully added arrow to diagram")
+    print("✓ Successfully added arrow to diagram")
 
 
 def main():
@@ -242,7 +222,6 @@ def main():
         print("  --style {solid|dashed|dotted}    Line style (default: solid)")
         print("  --color HEX                      Color (default: #1e1e1e)")
         print("  --label TEXT                     Text label on arrow")
-        print("  --use-edit-suffix                Edit via .excalidraw.edit to avoid editor overwrite issues (enabled by default; use --no-use-edit-suffix to disable)")
         print("\nExamples:")
         print("  python add-arrow.py diagram.excalidraw 300 200 500 300")
         print("  python add-arrow.py diagram.excalidraw 300 200 500 300 --label 'HTTP'")
@@ -258,9 +237,6 @@ def main():
     style = "solid"
     color = "#1e1e1e"
     label = None
-    # Default: use edit suffix to avoid editor overwrite issues
-    use_edit_suffix = True
-    
     i = 6
     while i < len(sys.argv):
         if sys.argv[i] == '--style':
@@ -287,12 +263,6 @@ def main():
             else:
                 print("Error: --label requires a text argument")
                 sys.exit(1)
-        elif sys.argv[i] == '--use-edit-suffix':
-            use_edit_suffix = True
-            i += 1
-        elif sys.argv[i] == '--no-use-edit-suffix':
-            use_edit_suffix = False
-            i += 1
         else:
             print(f"Error: Unknown option: {sys.argv[i]}")
             sys.exit(1)
@@ -303,10 +273,17 @@ def main():
         sys.exit(1)
     
     try:
-        work_path, final_path = prepare_edit_path(diagram_path, use_edit_suffix)
-        add_arrow_to_diagram(work_path, from_x, from_y, to_x, to_y, style, color, label)
-        finalize_edit_path(work_path, final_path)
-    except Exception as e:
+        final_path = diagram_path
+        work_path = prepare_edit_path(diagram_path)
+        committed = False
+        try:
+            add_arrow_to_diagram(work_path, from_x, from_y, to_x, to_y, style, color, label)
+            finalize_edit_path(work_path, final_path)
+            committed = True
+        finally:
+            if not committed and work_path.exists():
+                work_path.unlink()
+    except (OSError, ValueError, TypeError, KeyError) as e:
         print(f"Error: {e}")
         sys.exit(1)
 

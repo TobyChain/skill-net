@@ -4,10 +4,21 @@
 来源：MemEvolve: Meta-Evolution of Agent Memory Systems
 """
 
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import matplotlib.ticker as ticker
-import numpy as np
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description="Render the paired-delta bar example.")
+parser.add_argument("--out-dir", type=Path, default=Path.cwd())
+args = parser.parse_args()
+
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ModuleNotFoundError as exc:
+    parser.error(f"missing optional plotting dependency: {exc.name}; install matplotlib and numpy")
+
+args.out_dir.mkdir(parents=True, exist_ok=True)
+output_path = args.out_dir / "bar_memevolve_repro.png"
 
 # ── 预分析结论 ─────────────────────────────────────────────
 # 字体：serif，双层 'a'，衬线精细 → Computer Modern 风格
@@ -52,7 +63,7 @@ fig.subplots_adjust(wspace=0.35)
 
 BAR_W    = 0.28
 GAP      = 0.01      # 两柱几乎紧贴（原图约为 0）
-ARROW_KW = dict(arrowstyle='->', color='black', lw=1.2)
+ARROW_KW = {'arrowstyle': '->', 'color': 'black', 'lw': 1.2}
 
 for ax, panel in zip(axes, panels):
     groups   = panel['groups']
@@ -103,7 +114,7 @@ for ax, panel in zip(axes, panels):
             fontsize=12, fontweight='bold', va='top', ha='left',
             color='#003F6C', fontfamily='serif')
 
-plt.savefig('/Users/bytedance/gitcode/paper_experiment_plot_skills/repro/bar_memevolve_repro.png',
+plt.savefig(output_path,
             dpi=300, bbox_inches='tight', facecolor='white')
 plt.close()
-print('saved: bar_memevolve_repro.png')
+print(f'saved: {output_path.resolve()}')

@@ -2,3 +2,5 @@ interface:
   display_name: "Paper Ultra"
   short_description: "Clarify papers and protect contribution boundaries"
   default_prompt: "Use $paper-ultra to revise this manuscript for clear argument flow, direct language, natural authorial voice, exact preservation of evidence, respect for the requested edit scope and author style, and correct separation of final contributions from debugging effort or implementation corrections."
+policy:
+  allow_implicit_invocation: true

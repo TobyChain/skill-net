@@ -33,6 +33,6 @@ for sp in ax.spines.values():
 ax.tick_params(direction='out', length=4, width=0.8)
 ```
 
-## 复现文件
-- `repro/line_aime.py`
-- `repro/line_aime_repro.png`
+## 脚本
+
+运行 `scripts/plot/line_aime.py --out-dir OUTPUT_DIRECTORY`。

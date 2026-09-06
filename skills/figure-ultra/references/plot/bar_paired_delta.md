@@ -2,7 +2,7 @@
 
 **来源论文**：MemEvolve: Meta-Evolution of Agent Memory Systems  
 **图表类型**：分组柱状图（每组 2 柱：baseline vs method）  
-**复现代码**：`repro/bar_memevolve.py`  
+**脚本**：`scripts/plot/bar_memevolve.py`
 **原图**：`image1.png`
 
 ---

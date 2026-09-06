@@ -1,5 +1,12 @@
 # Section playbook
 
+## Contents
+
+- Abstract, highlights, and introduction
+- Methods, results, discussion, and conclusion
+- Tables, figures, and supplementary information
+- Cover letters, rebuttals, and bilingual synchronization
+
 Use these section patterns as diagnostic guides, not mandatory templates. Reorder existing sections or paragraphs only when the edit contract authorizes structural revision. In language-only mode, use the playbook to identify missing logic but report the structural issue instead of silently rebuilding the document.
 
 ## Abstract
