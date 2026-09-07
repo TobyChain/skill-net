@@ -6,9 +6,10 @@ REPO_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
 cd "$REPO_ROOT"
 
 python3 scripts/validate_skills.py
-python3 -m unittest -v tests/test_figure_tools.py skills/learn-ultra/scripts/test_validate_learning_html.py
+python3 scripts/check_commit_messages.py --history HEAD
+python3 -m unittest -v tests/test_commit_message_policy.py tests/test_figure_tools.py skills/learn-ultra/scripts/test_validate_learning_html.py
 if command -v ruff >/dev/null 2>&1; then
-  ruff check scripts/validate_skills.py tests/test_figure_tools.py skills/learn-ultra/scripts skills/figure-ultra/scripts
+  ruff check scripts/validate_skills.py scripts/check_commit_messages.py tests/test_commit_message_policy.py tests/test_figure_tools.py skills/learn-ultra/scripts skills/figure-ultra/scripts
 else
   printf 'WARN ruff is unavailable; skipping optional lint. Python syntax was checked.\n'
 fi

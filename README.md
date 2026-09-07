@@ -44,13 +44,16 @@ its name and description to the initial skill list.
 ## Validate
 
 ```bash
+./scripts/install-hooks.sh
 ./scripts/validate.sh
 ```
 
 The validation checks skill metadata and description budgets, resource links,
 positive and negative activation-fixture coverage, Python syntax, Excalidraw JSON,
 portable script paths, and deterministic editor rollback behavior. Matplotlib
-rendering still requires the optional plotting dependencies.
+rendering still requires the optional plotting dependencies. The repository's
+`commit-msg` hook removes AI attribution trailers before a commit is written,
+and validation rejects any such trailer found in reachable history.
 
 ## Authoring principles
 
