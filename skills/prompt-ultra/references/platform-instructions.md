@@ -7,8 +7,8 @@ Use this reference when `prompt-ultra` creates, audits, or migrates standing ins
 1. Use the target harness's native file for harness-specific behavior.
 2. Use the narrowest scope that covers the intended work.
 3. Prefer one shared normative source for cross-harness project guidance.
-4. Inspect the complete active chain before editing; closer or higher-priority files can shadow broader guidance.
-5. Start a new session after changing startup-loaded instructions unless the harness documents a reload command.
+4. Inspect the active chain once for the selected scope before editing; repeat only if the target path changes or evidence of shadowing appears.
+5. Use a documented reload or one new session after changing startup-loaded instructions when available. If unavailable, complete the file edit and report the runtime check as skipped.
 6. Use a hook, permission, managed policy, or CI when behavior must be enforced rather than requested.
 
 ## Codex
@@ -97,10 +97,7 @@ Do not add `.omp/AGENTS.md` merely to copy the root `AGENTS.md`. Do not create `
 
 ## Migration procedure
 
-1. Inventory existing native and compatible files for the selected scope.
-2. Classify each statement as shared policy, harness-specific behavior, path-specific rule, procedure, observation, or enforcement requirement.
-3. Move shared project policy into root `AGENTS.md`.
-4. Make `CLAUDE.md` import `@AGENTS.md`; retain only Claude-specific additions below it.
-5. Keep OMP-specific behavior in `.omp/AGENTS.md` only when it must override the shared source. Use `.omp/RULES.md` only for sticky requirements.
-6. Preserve user-level native files separately because the harnesses have different user roots and precedence. Synchronize their shared meaning through an explicit migration audit rather than assuming every harness supports the same import or symlink behavior.
-7. Verify each target in a new session before removing or deprecating a legacy file.
+1. Inspect the active instruction chain once for the selected scope and identify only rules that overlap, conflict, or can be shadowed.
+2. Put shared project policy in root `AGENTS.md`. Make `CLAUDE.md` import `@AGENTS.md` and retain only Claude-specific additions. Keep OMP-specific overrides in `.omp/AGENTS.md` and only a few sticky requirements in `.omp/RULES.md`.
+3. Preserve user-level native files separately because harnesses use different roots and precedence. Reconcile shared meaning without assuming identical import or symlink behavior.
+4. Verify discovery once when available before removing or deprecating a legacy source. If removal is not requested, an unavailable fresh-session check does not block completing the migration edits.

@@ -37,7 +37,7 @@
   },
   "prompt-ultra": {
     "should_trigger": [
-      "Turn this multi-stage migration into a scoped work contract.",
+      "Scope this risky multi-stage migration, then execute it without repeated planning gates.",
       "Remember this coding convention for future sessions.",
       "Audit and migrate our AGENTS.md and CLAUDE.md instructions."
     ],

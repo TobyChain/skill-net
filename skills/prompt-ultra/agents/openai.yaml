@@ -1,6 +1,6 @@
 interface:
   display_name: "Prompt Ultra"
-  short_description: "构建当前任务契约，并将稳定工作约定保存到正确的跨会话作用域"
-  default_prompt: "Use $prompt-ultra to turn this request into an executable work contract and persist only the stable instructions at the correct scope."
+  short_description: "消除关键歧义后立即执行，并仅按明确要求持久化工作约定"
+  default_prompt: "Use $prompt-ultra to resolve only execution-blocking ambiguity, execute the scoped task, and persist rules only when explicitly requested."
 policy:
   allow_implicit_invocation: true

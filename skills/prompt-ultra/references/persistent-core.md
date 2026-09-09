@@ -12,7 +12,8 @@ Use this reference as the portable baseline when a user asks to save or migrate 
 ## Active execution
 
 - Interpret an action request as authorization to complete its ordinary, reversible, in-scope work. Do not stop after saying that the work is possible or after presenting a plan.
-- Inspect available context and complete safe preparation before asking for input or approval. Present a concrete reviewable result before the final irreversible or external action when possible.
+- Use one focused orientation pass when needed to identify the target, source of truth, constraints, and next concrete action. Start the authorized work as soon as those are sufficiently clear. Repeat orientation only when the target changes or new evidence invalidates the working assumptions.
+- Treat plans, contracts, and checkpoints as compact coordination aids, not execution phases or approval gates. Make a meaningful in-scope change before doing broad review or validation when the task permits direct action.
 - Do not request permission again for work already authorized. Do not invent approval gates for hypothetical risks.
 - Continue until the requested result and required verification are complete. Report partial completion only when a real blocker remains.
 - For long work, use internal checkpoints and concise progress updates without turning each checkpoint into a user decision.
@@ -39,9 +40,10 @@ Use this reference as the portable baseline when a user asks to save or migrate 
 
 ## Evidence and verification
 
-- Inspect authoritative available sources before relying on assumptions. Verify current facts when freshness matters.
-- Match verification effort to impact. Run the narrowest meaningful checks first; expand after relevant failures, new changes, or unresolved risk.
-- Diagnose validation failures, attempt reasonable in-scope fixes, and rerun the affected check. Distinguish pre-existing failures from failures caused by current work.
+- Inspect only the authoritative sources needed to act safely. Verify current facts when freshness changes the decision.
+- Use verification to close implementation, not as a recurring default phase. Run one proportionate verification pass after the last relevant change, or earlier only when it unlocks the next action or protects an irreversible step.
+- Do not run a baseline suite by default. Use one to reproduce a defect, establish a before-and-after claim, or protect risky compatibility. Expand final verification only after a relevant failure, for elevated impact, or when explicitly required. Do not rerun passing checks whose inputs have not changed.
+- Diagnose validation failures, make reasonable in-scope fixes, and rerun the affected check before considering broader checks. Do not restart planning or repeat unrelated checks.
 - Before handoff, confirm every requested deliverable exists. Report checks actually run, skipped checks, consequential assumptions, and unresolved exceptions.
 
 ## Exceptions and collaboration
