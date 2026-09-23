@@ -79,9 +79,9 @@ def validate_skill(skill: Path, errors: list[str]) -> None:
         fail(errors, f"{metadata}: default_prompt must mention ${name}")
 
 
-def validate_scripts(errors: list[str]) -> None:
+def validate_scripts(native: list[Path], errors: list[str]) -> None:
     """Parse Python and JSON assets and reject machine-specific script paths."""
-    for path in sorted(SKILLS.rglob("*.py")):
+    for path in sorted(p for skill in native for p in skill.rglob("*.py")):
         text = path.read_text(encoding="utf-8")
         try:
             ast.parse(text, filename=str(path))
@@ -97,7 +97,7 @@ def validate_scripts(errors: list[str]) -> None:
             if re.search(r"['\"]text\\.usetex['\"]\\s*:\\s*True", text):
                 fail(errors, f"{path}: plot scripts must not require system LaTeX")
 
-    for path in sorted(SKILLS.rglob("*.excalidraw")):
+    for path in sorted(p for skill in native for p in skill.rglob("*.excalidraw")):
         try:
             json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
@@ -126,19 +126,21 @@ def validate_activation_cases(skill_names: set[str], errors: list[str]) -> None:
 def main() -> int:
     """Run all static skill checks."""
     errors: list[str] = []
-    skills = sorted(path for path in SKILLS.iterdir() if (path / "SKILL.md").is_file())
-    for skill in skills:
+    skills = sorted(path for path in SKILLS.glob("*/*") if (path / "SKILL.md").is_file())
+    native = [skill for skill in skills if skill.name.endswith("-ultra")]
+    community = [skill for skill in skills if not skill.name.endswith("-ultra")]
+    for skill in native:
         validate_skill(skill, errors)
-    validate_scripts(errors)
-    validate_activation_cases({skill.name for skill in skills}, errors)
-    for path in sorted(SKILLS.rglob("README.md")):
+    validate_scripts(native, errors)
+    validate_activation_cases({skill.name for skill in native}, errors)
+    for path in sorted(p for skill in native for p in skill.rglob("README.md")):
         fail(errors, f"{path}: move agent-facing content to SKILL.md or references")
 
     if errors:
         for error in errors:
             print(f"FAIL {error}")
         return 1
-    print(f"PASS skills={len(skills)} activation_fixture_sets={len(skills)}")
+    print(f"PASS native={len(native)} community={len(community)} activation_fixture_sets={len(native)}")
     return 0
 
 

@@ -1,13 +1,37 @@
 {
-  "figure-ultra": {
+  "drawio-ultra": {
     "should_trigger": [
       "Create an editable Draw.io architecture diagram and export it to SVG.",
-      "Plot these CSV values as a publication-ready grouped bar chart.",
-      "Turn this workflow into an Excalidraw whiteboard sketch."
+      "Draw an ER diagram for these tables as .drawio XML.",
+      "Turn this service interaction into a sequence diagram I can edit."
     ],
     "should_not_trigger": [
       "Write this diagram as a TikZ picture in a .tex file.",
-      "Rewrite the introduction of my academic paper.",
+      "Sketch this workflow as a hand-drawn whiteboard.",
+      "Plot these CSV values as a grouped bar chart."
+    ]
+  },
+  "excalidraw-ultra": {
+    "should_trigger": [
+      "Turn this workflow into an Excalidraw whiteboard sketch.",
+      "Draw a hand-styled brainstorm map of these ideas.",
+      "Make a relationship diagram with a hand-drawn feel."
+    ],
+    "should_not_trigger": [
+      "Create a precise editable architecture diagram in Draw.io XML.",
+      "Plot this dataset as a publication-ready chart.",
+      "Rewrite the introduction of my academic paper."
+    ]
+  },
+  "matlabplot-ultra": {
+    "should_trigger": [
+      "Plot these CSV values as a publication-ready grouped bar chart.",
+      "Draw a loss curve with a confidence band from this experiment log.",
+      "Make a radar chart comparing these five models."
+    ],
+    "should_not_trigger": [
+      "Create an editable flowchart in Draw.io.",
+      "Sketch this architecture on an Excalidraw whiteboard.",
       "Teach me this repository with examples and exercises."
     ]
   },

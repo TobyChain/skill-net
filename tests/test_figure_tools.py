@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ROOT / "skills" / "figure-ultra" / "scripts"
+SCRIPTS = ROOT / "skills" / "figures" / "excalidraw-ultra" / "scripts"
 
 
 def diagram() -> dict:
