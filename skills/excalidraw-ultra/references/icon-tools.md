@@ -14,6 +14,12 @@ python scripts/add-arrow.py DIAGRAM.excalidraw FROM_X FROM_Y TO_X TO_Y \\
 The tools write to `.excalidraw.edit` and atomically replace the original only
 after successful validation and serialization.
 
+For an arrow between existing nodes, use the geometry-first workflow instead:
+run `layout_geometry.py` and then `apply_layout.py`. This calculates boundary
+anchors, obstacle-avoiding waypoints, bindings, and label positions. The
+coordinate form above is reserved for a free arrow whose endpoints are not
+owned by diagram nodes.
+
 ## Add an icon
 
 First split a downloaded `.excalidrawlib` file:

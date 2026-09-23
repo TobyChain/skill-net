@@ -1,0 +1,6 @@
+interface:
+  display_name: "Matplotlib Ultra"
+  short_description: "用可复现 Matplotlib 脚本创建论文级数据图"
+  default_prompt: "Use $matlabplot-ultra to create this truthful publication-ready Matplotlib chart and export the requested formats."
+policy:
+  allow_implicit_invocation: true

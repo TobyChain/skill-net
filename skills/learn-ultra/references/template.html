@@ -22,7 +22,7 @@
     --err:#b03a48;
     --shadow:0 1px 0 rgba(26,28,44,.04), 0 8px 32px -16px rgba(26,28,44,.18);
     --radius:14px;
-    --max:980px;
+    --max:1120px;
     --side:280px;
     --mono:'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace;
     --sans:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
@@ -110,15 +110,24 @@
 
   /* ============ tables ============ */
   table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
-  th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
   th{background:var(--paper-2);font-weight:500;color:var(--ink-2);font-size:13px;letter-spacing:.02em}
   tr:hover td{background:rgba(217,111,58,.03)}
+  /* 优先让表格在内容宽内放下；.table-wrap 只是窄屏的回退容器 */
+  .table-wrap{overflow-x:auto;margin:16px 0}
 
   /* ============ code ============ */
   pre,code{font-family:var(--mono)}
-  :not(pre)>code{
-    background:var(--paper-2);padding:2px 6px;border-radius:4px;
-    font-size:13.5px;color:var(--ink);
+  /* 行内不使用代码芯片（灰色等宽小块）。术语/标识符等行内标记一律用荧光笔样式： */
+  .hl{
+    padding:.06em .18em;border-radius:3px;
+    background:linear-gradient(180deg,rgba(250,222,120,0) 8%,rgba(250,222,120,.65) 8%,rgba(250,222,120,.65) 92%,rgba(250,222,120,0) 92%);
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  }
+  .hl-green{
+    padding:.06em .18em;border-radius:3px;
+    background:linear-gradient(180deg,rgba(178,214,150,0) 8%,rgba(178,214,150,.6) 8%,rgba(178,214,150,.6) 92%,rgba(178,214,150,0) 92%);
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;
   }
   pre{
     margin:14px 0;padding:18px 20px;
@@ -154,6 +163,24 @@
   @media (max-width:900px){
     .code-pair{grid-template-columns:1fr}
   }
+
+  /* ============ bleed（宽表格/宽代码通栏，用满页宽，避免横向滚动） ============ */
+  .bleed{
+    width:min(1400px,calc(100vw - var(--side) - 64px));
+    margin:16px 50%;transform:translateX(-50%);
+  }
+  .bleed pre{margin:0}
+  @media (max-width:900px){.bleed{width:100%;margin:16px 0;transform:none}}
+  @media print{.bleed{width:100%;margin:16px 0;transform:none}}
+
+  /* ============ two-col（可选分栏，是否使用由内容决定，见 style-guide） ============
+     仅当某一页/整篇以文字为主、元素小而并行时才分栏；代码块、宽表格、
+     公式为主的文档保持单栏并用 .bleed 用满页宽。分栏时禁止代码/表格跨栏断裂。 */
+  .two-col{column-count:2;column-gap:44px;column-rule:1px solid var(--line)}
+  .two-col>h2,.two-col>h3,.two-col .span-both{column-span:all}
+  .two-col pre,.two-col table,.two-col .mermaid,.two-col details,
+  .two-col .code-pair,.two-col .quiz{break-inside:avoid}
+  @media (max-width:900px){.two-col{column-count:1}}
 
   /* ============ mermaid ============ */
   .mermaid{

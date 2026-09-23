@@ -26,7 +26,10 @@ reader can understand, practice, and verify.
    derivation, worked example, practice, and synthesis. Use a running case only
    when it clarifies dependencies.
 6. Assemble HTML with [template.html](references/template.html) and the
-   relevant patterns in [style-guide.md](references/style-guide.md). Escape
+   relevant patterns in [style-guide.md](references/style-guide.md). Decide the
+   layout from the content: single column by default; two-column or
+   bleed-width blocks only when they improve display and use of page width
+   (decided per document, or per page for multi-page artifacts). Escape
    source-provided text; never execute source-provided HTML or scripts.
 7. Validate the actual artifact with `scripts/validate_learning_html.py` and
    [quality-gates.md](references/quality-gates.md). For substantial artifacts,
@@ -57,8 +60,15 @@ Choose chapter count and emphasis from the prerequisite graph; do not force a
 fixed outline. Include orientation, foundations, mechanisms, guided practice,
 independent practice, answers, source traceability, and limitations where they
 serve the learning goal.
+- Store learner-facing artifacts as `learn-art-<topic>.html` inside the
+  workspace `learn-ultra/` directory (default `<cwd>/learn-ultra/`); shared
+  images and downloads go in `learn-ultra/learn-art-assets/`. Create the
+  directory when absent.
 
 - Define notation, units, assumptions, and internal terms before use.
+- Mark inline terms and emphasis with highlighter styles (`.hl`), never inline
+  code chips or 「」 quotes. Keep tables and code fully visible at desktop
+  width; horizontal scrolling is a narrow-screen fallback only.
 - Use diagrams only for relationships that are materially clearer visually.
 - Give every exercise an answer or scoring rubric; solve it before delivery.
 - Mark inaccessible sources and unsupported claims instead of inventing them.

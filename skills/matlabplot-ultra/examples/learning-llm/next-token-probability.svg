@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="430" viewBox="0 0 760 430">
+<rect width="760" height="430" fill="white"/><text x="380" y="38" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold">GPT-style next-token prediction</text>
+<text x="730" y="62" text-anchor="end" font-family="Arial" font-size="12" fill="#666">Teaching illustration — not benchmark data</text>
+<line x1="85" y1="350" x2="700" y2="350" stroke="#333"/><line x1="85" y1="80" x2="85" y2="350" stroke="#333"/>
+<g stroke="#ddd" stroke-dasharray="5 4"><line x1="85" y1="105" x2="700" y2="105"/><line x1="85" y1="187" x2="700" y2="187"/><line x1="85" y1="269" x2="700" y2="269"/></g>
+<g font-family="Arial" font-size="15" text-anchor="middle"><rect x="125" y="121" width="90" height="229" fill="#6C8EBF"/><rect x="270" y="215" width="90" height="135" fill="#82B366"/><rect x="415" y="258" width="90" height="92" fill="#D6B656"/><rect x="560" y="305" width="90" height="45" fill="#B3B3B3"/><text x="170" y="112">0.46</text><text x="315" y="206">0.27</text><text x="460" y="249">0.18</text><text x="605" y="296">0.09</text><text x="170" y="380">故宫</text><text x="315" y="380">烤鸭</text><text x="460" y="380">旅游</text><text x="605" y="380">天气</text></g>
+<text x="25" y="220" transform="rotate(-90 25 220)" text-anchor="middle" font-family="Arial" font-size="16">Illustrative probability</text><text x="390" y="415" text-anchor="middle" font-family="Arial" font-size="16">Candidate next token</text>
+</svg>

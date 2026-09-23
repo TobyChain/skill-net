@@ -1,6 +1,0 @@
-interface:
-  display_name: "Figure Ultra"
-  short_description: "创建可编辑结构图、白板图和数据图，并验证所需导出结果"
-  default_prompt: "Use $figure-ultra to create this visual in the appropriate editable format and verify the requested exports."
-policy:
-  allow_implicit_invocation: true

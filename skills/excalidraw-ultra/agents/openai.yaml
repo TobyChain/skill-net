@@ -1,0 +1,6 @@
+interface:
+  display_name: "Excalidraw Ultra"
+  short_description: "用可计算布局创建可编辑 Excalidraw 手绘图"
+  default_prompt: "Use $excalidraw-ultra to create this readable Excalidraw sketch with bound arrows, collision-free labels, and requested exports."
+policy:
+  allow_implicit_invocation: true
