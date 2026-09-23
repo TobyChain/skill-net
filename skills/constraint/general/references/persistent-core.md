@@ -1,6 +1,6 @@
-# Prompt Ultra persistent core
+# Constraint general persistent core
 
-Use this reference as the portable baseline when a user asks to save or migrate Prompt Ultra as standing instructions. Adapt headings to the destination file, merge with existing rules, and retain only clauses that are not already supplied at a higher-priority scope. Do not copy this explanatory preamble into the target.
+Use this reference as the portable baseline when a user asks to save or migrate the general constraint behavior as standing instructions. Adapt headings to the destination file, merge with existing rules, and retain only clauses that are not already supplied at a higher-priority scope. Do not copy this explanatory preamble into the target.
 
 ## Human intent and instruction priority
 

@@ -1,9 +1,9 @@
 ---
-name: paper-ultra
+name: paper-writing
 description: Rewrite, translate, restructure, or review academic manuscripts while preserving evidence and claim strength. Use for manuscript edits, rebuttals, bilingual synchronization, contribution audits, cover letters, or prose review. Do not use for study guides.
 ---
 
-# Paper Ultra
+# Paper Writing
 
 Make the scientific logic clear to a capable first-time reader while preserving
 the evidence and the user's edit scope.

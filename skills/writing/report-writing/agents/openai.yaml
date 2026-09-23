@@ -1,0 +1,6 @@
+interface:
+  display_name: "Report Writing"
+  short_description: "Evidence-preserving reports and executive summaries"
+  default_prompt: "Use $report-writing to draft or restructure this report with a reader-first structure, stable terminology, exact preservation of numbers and sources, and a conclusion-first executive summary."
+policy:
+  allow_implicit_invocation: true

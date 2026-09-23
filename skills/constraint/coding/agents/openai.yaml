@@ -1,0 +1,6 @@
+interface:
+  display_name: "Coding"
+  short_description: "Scope coding tasks, execute, self-review, verify once"
+  default_prompt: "Use $coding to scope this coding task with a compact Work Contract, implement the authorized change without repeated planning loops, self-review the diff, and run one proportionate verification pass."
+policy:
+  allow_implicit_invocation: true

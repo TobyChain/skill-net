@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression tests for the learn-ultra HTML validator."""
+"""Regression tests for the abstract-skill HTML validator."""
 
 from __future__ import annotations
 

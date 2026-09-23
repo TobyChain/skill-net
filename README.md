@@ -1,21 +1,23 @@
-# ultra-skills
+# skill-net
 
 Focused Agent Skills for reusable work that benefits from domain guidance,
 bundled references, or deterministic tools. Each `SKILL.md` is a small router;
 detailed material is loaded only when the selected workflow needs it.
 
-Skills are organized by domain under `skills/<domain>/<name>`. The `-ultra`
-family is authored in this repository; **Community picks** are vendored
-third-party skills that the community repeatedly recommends, stored complete
-with their original licenses and documentation.
+Skills are organized by domain under `skills/<domain>/<name>`. Skills with an
+`agents/openai.yaml` metadata file are authored in this repository; **Community
+picks** are vendored third-party skills that the community repeatedly
+recommends, stored complete with their original licenses and documentation.
 
 ## Skills
 
 | Domain | Skill | Use when | Do not use when |
 | --- | --- | --- | --- |
-| prompting | [`prompt-ultra`](skills/prompting/prompt-ultra) | A task needs a Work Contract, authority or acceptance boundaries, or explicitly persistent instructions | The request is simple and one-off |
-| learning | [`learn-ultra`](skills/learning/learn-ultra) | Sources must become a tutorial, learning path, examples, exercises, or textbook-style HTML | The user wants a brief summary or manuscript edit |
-| writing | [`paper-ultra`](skills/writing/paper-ultra) | An academic manuscript needs rewriting, translation, review, rebuttal, or contribution auditing | The goal is to learn the paper as a tutorial |
+| constraint | [`coding`](skills/constraint/coding) | A coding task needs a Work Contract: scope, authority, or acceptance settled before implementation, then proportionate validation and a diff self-review | The edit is trivial with an unambiguous target |
+| constraint | [`general`](skills/constraint/general) | A non-code task needs a Work Contract, or standing instructions (AGENTS.md, CLAUDE.md, personal defaults) must be created, audited, or migrated on explicit request | The work is a simple one-off request |
+| learning | [`abstract-skill`](skills/learning/abstract-skill) | Sources must become a tutorial, learning path, examples, exercises, or textbook-style HTML | The user wants a brief summary or manuscript edit |
+| writing | [`paper-writing`](skills/writing/paper-writing) | An academic manuscript needs rewriting, translation, review, rebuttal, or contribution auditing | The goal is to learn the paper as a tutorial |
+| writing | [`report-writing`](skills/writing/report-writing) | A status report, analysis or review document, decision memo, or report-based bilingual synchronization needs drafting or restructuring | The deliverable is an academic manuscript or a study guide |
 | figures | [`drawio-ultra`](skills/figures/drawio-ultra) | The deliverable is an editable Draw.io XML diagram | A whiteboard sketch, numeric plot, or LaTeX source is required |
 | figures | [`excalidraw-ultra`](skills/figures/excalidraw-ultra) | A hand-drawn whiteboard, brainstorm, or relationship sketch is wanted | A formal Draw.io diagram, numeric plot, or LaTeX source is required |
 | figures | [`matlabplot-ultra`](skills/figures/matlabplot-ultra) | Publication-ready numeric charts from experimental data | The deliverable is a node-link diagram or LaTeX-native figure |
@@ -43,7 +45,7 @@ skill directory for your agent. For Codex repository scope:
 
 ```bash
 mkdir -p .agents/skills
-cp -R /path/to/ultra-skills/skills/figures/drawio-ultra .agents/skills/
+cp -R /path/to/skill-net/skills/figures/drawio-ultra .agents/skills/
 ```
 
 For Codex user scope, use `~/.agents/skills/`. Codex also follows symlinked
@@ -62,8 +64,8 @@ the nested `skills/` directory, e.g. `skills/design/taste-skill/skills/taste-ski
 - Data plots: Python 3.9+, Matplotlib, and NumPy.
 - TikZ compilation: a LaTeX distribution and the compiler required by the
   target document.
-- Learn Ultra HTML: core content remains readable without JavaScript; Mermaid,
-  syntax highlighting, and web fonts use CDN assets when available.
+- Abstract-skill HTML: core content remains readable without JavaScript;
+  Mermaid, syntax highlighting, and web fonts use CDN assets when available.
 - Community picks may declare their own dependencies; see each vendored
   `README.md`.
 
@@ -76,8 +78,8 @@ the nested `skills/` directory, e.g. `skills/design/taste-skill/skills/taste-ski
 
 The validation checks skill metadata and description budgets, resource links,
 positive and negative activation-fixture coverage, Python syntax, Excalidraw JSON,
-portable script paths, and deterministic editor rollback behavior. Native
-`-ultra` skills must satisfy every rule; vendored community picks are only
+portable script paths, and deterministic editor rollback behavior. Skills with
+`agents/openai.yaml` must satisfy every rule; vendored community picks are only
 checked for loadability. The repository's `commit-msg` hook removes AI
 attribution trailers before a commit is written, and validation rejects any
 such trailer found in reachable history.
@@ -101,8 +103,13 @@ such trailer found in reachable history.
   earlier `figure-ultra`, which incorporated patterns from Snailclimb/AIGuide,
   github/awesome-copilot, Trae1ounG/paper-plot-skills, and earlier local
   diagram skills.
-- `paper-ultra` incorporates the reader-first writing and evidence-boundary
+- `coding` and `general` split out of the earlier `prompt-ultra`; the
+  `prompting` domain was renamed `constraint`.
+- `paper-writing` and `report-writing` split out of the earlier `paper-ultra`;
+  `paper-writing` incorporates the reader-first writing and evidence-boundary
   practices from ysyecust/write-reader-first-papers.
+- `abstract-skill` was renamed from the earlier `learn-ultra`.
+- The repository was renamed from `ultra-skills` to `skill-net`.
 - Community picks: [alchaincyf/huashu-design](https://github.com/alchaincyf/huashu-design)
   (MIT), [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (MIT),
   [walkinglabs/university-skill](https://github.com/walkinglabs/university-skill)

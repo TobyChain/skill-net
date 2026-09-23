@@ -35,7 +35,19 @@
       "Teach me this repository with examples and exercises."
     ]
   },
-  "learn-ultra": {
+  "tikz-ultra": {
+    "should_trigger": [
+      "Create this commutative diagram as a tikzpicture.",
+      "Debug the compilation error in this existing TikZ figure.",
+      "Deliver a reproducible .tex figure and its compiled PDF."
+    ],
+    "should_not_trigger": [
+      "Draw a generic architecture diagram as a PNG.",
+      "Plot this CSV as a Matplotlib line chart.",
+      "Rewrite the results section of my paper."
+    ]
+  },
+  "abstract-skill": {
     "should_trigger": [
       "Teach me this repository and include worked examples and exercises.",
       "Turn this paper into a source-grounded Chinese tutorial.",
@@ -47,7 +59,7 @@
       "Draw an architecture diagram from these components."
     ]
   },
-  "paper-ultra": {
+  "paper-writing": {
     "should_trigger": [
       "Rewrite this paper abstract while preserving every number and citation.",
       "Draft a response to these reviewer comments.",
@@ -59,28 +71,40 @@
       "Clarify the authority and acceptance criteria for this coding task."
     ]
   },
-  "prompt-ultra": {
+  "coding": {
     "should_trigger": [
-      "Scope this risky multi-stage migration, then execute it without repeated planning gates.",
+      "Scope this risky multi-stage database migration, then implement it without repeated planning gates.",
+      "Implement this feature, but first settle acceptance criteria and completion evidence.",
+      "Refactor this module: confirm scope and authority boundaries, then execute."
+    ],
+    "should_not_trigger": [
       "Remember this coding convention for future sessions.",
-      "Audit and migrate our AGENTS.md and CLAUDE.md instructions."
+      "Draft a quarterly status report for this project.",
+      "Fix this typo in one file."
+    ]
+  },
+  "general": {
+    "should_trigger": [
+      "Remember this formatting convention for future sessions.",
+      "Audit and migrate our AGENTS.md and CLAUDE.md instructions.",
+      "Scope this cross-team research task: authority, sources, and acceptance."
     ],
     "should_not_trigger": [
       "Fix this typo in one file.",
-      "Create a Draw.io flowchart.",
-      "Review the prose in my paper abstract."
+      "Implement this feature and self-review the diff.",
+      "Rewrite the introduction of my academic paper."
     ]
   },
-  "tikz-ultra": {
+  "report-writing": {
     "should_trigger": [
-      "Create this commutative diagram as a tikzpicture.",
-      "Debug the compilation error in this existing TikZ figure.",
-      "Deliver a reproducible .tex figure and its compiled PDF."
+      "Draft a quarterly status report for this project.",
+      "Write an analysis report on these experiment results with a recommendation.",
+      "Restructure this review document so the verdict per criterion comes first."
     ],
     "should_not_trigger": [
-      "Draw a generic architecture diagram as a PNG.",
-      "Plot this CSV as a Matplotlib line chart.",
-      "Rewrite the results section of my paper."
+      "Rewrite this paper abstract while preserving every number and citation.",
+      "Teach me this repository with examples and exercises.",
+      "Scope this coding task and implement it."
     ]
   }
 }

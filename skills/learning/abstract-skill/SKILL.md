@@ -1,9 +1,9 @@
 ---
-name: learn-ultra
+name: abstract-skill
 description: Turn repositories, papers, articles, or source collections into source-grounded Chinese tutorials. Use for in-depth study, learning paths, worked examples, exercises, curriculum restructuring, or textbook-style HTML. Do not use for brief summaries or manuscript editing.
 ---
 
-# Learn Ultra
+# Abstract Skill
 
 Build a learning artifact, not a long summary. Optimize for what the intended
 reader can understand, practice, and verify.
@@ -61,8 +61,8 @@ fixed outline. Include orientation, foundations, mechanisms, guided practice,
 independent practice, answers, source traceability, and limitations where they
 serve the learning goal.
 - Store learner-facing artifacts as `learn-art-<topic>.html` inside the
-  workspace `learn-ultra/` directory (default `<cwd>/learn-ultra/`); shared
-  images and downloads go in `learn-ultra/learn-art-assets/`. Create the
+  workspace `abstract-skill/` directory (default `<cwd>/abstract-skill/`); shared
+  images and downloads go in `abstract-skill/learn-art-assets/`. Create the
   directory when absent.
 
 - Define notation, units, assumptions, and internal terms before use.

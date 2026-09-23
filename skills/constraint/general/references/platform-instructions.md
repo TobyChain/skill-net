@@ -1,6 +1,6 @@
 # Native persistent instruction files
 
-Use this reference when `prompt-ultra` creates, audits, or migrates standing instructions. Verify current local configuration when environment variables or named profiles can relocate a user directory.
+Use this reference when the `general` skill creates, audits, or migrates standing instructions. Verify current local configuration when environment variables or named profiles can relocate a user directory.
 
 ## Selection rules
 

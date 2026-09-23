@@ -1,6 +1,0 @@
-interface:
-  display_name: "Prompt Ultra"
-  short_description: "消除关键歧义后立即执行，并仅按明确要求持久化工作约定"
-  default_prompt: "Use $prompt-ultra to resolve only execution-blocking ambiguity, execute the scoped task, and persist rules only when explicitly requested."
-policy:
-  allow_implicit_invocation: true

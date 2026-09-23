@@ -127,8 +127,8 @@ def main() -> int:
     """Run all static skill checks."""
     errors: list[str] = []
     skills = sorted(path for path in SKILLS.glob("*/*") if (path / "SKILL.md").is_file())
-    native = [skill for skill in skills if skill.name.endswith("-ultra")]
-    community = [skill for skill in skills if not skill.name.endswith("-ultra")]
+    native = [skill for skill in skills if (skill / "agents" / "openai.yaml").is_file()]
+    community = [skill for skill in skills if not (skill / "agents" / "openai.yaml").is_file()]
     for skill in native:
         validate_skill(skill, errors)
     validate_scripts(native, errors)
