@@ -3,3 +3,4 @@ __MACOSX/
 __pycache__/
 *.pyc
 .qoder/settings.local.json
+.pytest_cache/
