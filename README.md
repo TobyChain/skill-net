@@ -34,6 +34,7 @@ point at each skill's loadable directory; the vendored copy keeps everything
 | design | [`huashu-design`](skills/design/huashu-design) | [alchaincyf/huashu-design](https://github.com/alchaincyf/huashu-design) | MIT | Deliverable HTML-native design: product-launch animations, clickable prototypes, editable slide decks, print-grade infographics |
 | design | [`taste-skill`](skills/design/taste-skill/skills) (14 sub-skills: taste, brutalist, minimalist, redesign, brandkit, …) | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | MIT | Frontend work that must avoid generic AI slop and land a distinctive, tasteful visual identity |
 | learning | [`university-skill`](skills/learning/university-skill/skills) (university-textbook, university-coursebook) | [walkinglabs/university-skill](https://github.com/walkinglabs/university-skill) | none declared | Turning any topic into a structured university lecture or textbook-style course |
+| learning | [`wdkns-skills`](skills/learning/wdkns-skills/skills) (youtube-render-pdf, bilibili-render-pdf, subtitle-refine, tensor-formula-viz) | [wdkns/wdkns-skills](https://github.com/wdkns/wdkns-skills) | GPL-3.0 | Video lectures (YouTube/Bilibili) must become structured Chinese LaTeX lecture-note PDFs, ASR subtitles need timeline-preserving refinement, or tensor/matrix formulas need shape-aligned diagrams |
 
 No license was declared by university-skill upstream; it is vendored with full
 attribution and can be removed on the author's request.
